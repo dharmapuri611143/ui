@@ -1,0 +1,59 @@
+<section id="about" class="mat-typography" [ngStyle.lt-md]="{'margin-top': '50px', 'margin-bottom': '50px'}">
+    <div class="container">
+        <div class="about-section about-heading" fxLayout="column" fxLayoutAlign="center center">
+            <div>
+                <h2>SEND US AN ENQUIRY</h2>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutWrap="nowrap">
+
+            <div fxFlex="50">
+                <img class="full-width" style="vertical-align: middle;" src="assets/images/contact_bg.jpg">
+            </div>
+
+            <div fxFlex="50">
+                <mat-card class="default">
+                    <mat-card-content>
+                        <form [formGroup]="getQuoteForm" fxLayout="column" fxLayoutAlign="start" (ngSubmit)="onSubmit()">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput formControlName="name" type="text" name="name" placeholder="Name" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput formControlName="email" type="email" name="email" placeholder="Email" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Mobile Number</mat-label>
+                                <input matInput formControlName="phone" type="number" name="phone" placeholder="Mobile Number" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Location</mat-label>
+                                <input matInput formControlName="location" type="text" name="location" placeholder="Location" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Category--</mat-label>
+                                <mat-select #mySelect formControlName="category" (selectionChange)="getCourseByCat(mySelect.value)">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Course--</mat-label>
+                                <mat-select formControlName="course">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let course of courses" [value]="course.name">{{course.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <textarea matInput placeholder="Your Query" name="message" formControlName="message"></textarea>
+                            </mat-form-field>
+                            <button [disabled]="!getQuoteForm.valid" class="mb-8" mat-raised-button color="primary">Submit</button>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</section>

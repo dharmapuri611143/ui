@@ -1,0 +1,25 @@
+<div fxLayout="row wrap" class="mt-8" fxLayoutAlign="center center" [@animate]="{value:'*',params:{y:'25px',delay:'500ms'}}">
+    <div fxLayout="column" fxFlex="80" appNoRightClick>
+        <!-- Time line -->
+        <mat-card class="default">
+            <mat-card-title>
+                <div fxLayout="row" fxFlex="100" fxLayoutAlign="center center">
+                    <div fxFlex="100" style="text-align: center;">
+                        <h1>{{(itemDetail ||{}).title}}</h1>
+                        <p class="text-muted p-line">Created On: {{(itemDetail ||{}).created | date}}</p>
+                    </div>
+                </div>
+            </mat-card-title>
+            <mat-divider></mat-divider>
+            <mat-card-content>
+                <!-- <img class="tip-banner" mat-card-image height="450px;" [src]="itemDetail?.image"> -->
+                <mat-card-content>
+                    <div fxLayout="row">
+                        <div #htmlcontent fxFlex="80">
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

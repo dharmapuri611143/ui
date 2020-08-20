@@ -1,0 +1,69 @@
+<div class="seciton-left">
+</div>
+<div class="form-holder height-100vh mat-elevation-z4" [perfectScrollbar]="{}">
+    <form [formGroup]="signupForm" class="signup-form" fxLayout="column" fxLayoutAlign="start" (ngSubmit)="onSubmit()">
+        <!-- headline -->
+        <div class="form-headline text-center mb-16">
+            <h1 class="font-weight-bold">Welcome to Amida Education!</h1>
+            <p class="text-muted">Create an account get unlimited access</p>
+
+        </div>
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>First Name</mat-label>
+            <input formControlName="firstName" matInput type="text" name="firstName" placeholder="First Name" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Last Name</mat-label>
+            <input formControlName="lastName" matInput type="text" name="lastName" placeholder="Last Name" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>User Name</mat-label>
+            <input formControlName="username" matInput type="text" name="username" placeholder="User Name" />
+        </mat-form-field>
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="phone" type="number" name="phone" placeholder="Mobile Number" />
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email" name="email" placeholder="Email" />
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Password</mat-label>
+            <mat-icon matSuffix [ngStyle]="{'color': typePassword ? 'red': '#247ba0'}" (click)="togglePassword()">remove_red_eye</mat-icon>
+            <input matInput formControlName="hashedPassword" type="{{ typePassword ? 'text' : 'password' }}" name="hashedPassword" placeholder="********" />
+        </mat-form-field>
+
+        <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Confirm password</mat-label>
+            <input matInput type="password" name="confirm_password" placeholder="********" formControlName="confirmPassword" />
+            <mat-error>
+                Password didn't match
+            </mat-error>
+        </mat-form-field>
+
+        <mat-checkbox class="mb-24" formControlName="agreed">Agree to our <a style="color: blue;" [routerLink]="['/home/tofs']">Terms of Service</a> and <a style="color: blue;" [routerLink]="['/home/privacy']">Privacy Policy</a></mat-checkbox>
+        <button class="mb-8" mat-raised-button color="primary" [disabled]="signupForm.invalid">Signup</button>
+        <div class="text-right">
+            <a [routerLink]="'/sessions/signin'" class="mat-color-primary text-right full-width">Sign in with an existing account</a
+          >
+        </div>
+       
+            <mat-divider class="my-32"></mat-divider>
+    </form>
+    <div class="mb-24" fxLayout="column" class="text-center" fxLayoutGap="16px">
+            <div [ngStyle.sm]="{'width': '50%'}" [ngStyle.lt-sm]="{'width': '100%'}">
+                <button mat-icon-button class="mx-16" aria-label="Example icon-button with a heart icon">
+                <img width='40px' src="assets/images/icon/facebook.png" alt="" />
+              </button>
+                <!-- <button mat-icon-button class="mx-16" aria-label="Example icon-button with a heart icon">
+                  <img width='40px' src="assets/images/icon/twitter.png" alt="" /> 
+              </button> -->
+                <button mat-icon-button class="mx-16" aria-label="Example icon-button with a heart icon">
+                    <img width='40px' src="assets/images/icon/google-plus.png" alt="" />  
+                </button>
+            </div>
+        </div>
+</div>

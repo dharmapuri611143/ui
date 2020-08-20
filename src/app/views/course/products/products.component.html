@@ -1,0 +1,168 @@
+<div>
+    <mat-sidenav-container>
+        <mat-sidenav EgretSideNavToggle class="shop-sidebar default-light-bg">
+            <div class="shop-filters-wrap">
+                <form [formGroup]="filterForm">
+                    <mat-accordion multi="true" displayMode="flat">
+                        <!-- Main Category -->
+                        <mat-expansion-panel expanded="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Main Categories
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ul class="product-categories">
+                                <li *ngFor="let c of rootCategories$ | async" [ngClass]="{'fw-500': c.name === activeRootCategory}" (click)="setActiveMainCategory(c.name, c._id)">{{c.name}}</li>
+                            </ul>
+                        </mat-expansion-panel>
+                        <!-- Categories -->
+                        <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Categories
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ul class="product-categories">
+                                <li *ngFor="let c of categories$ | async" [ngClass]="{'fw-500': c.name === activeCategory}" (click)="setActiveCategory(c.name)">{{c.name}}</li>
+                            </ul>
+                        </mat-expansion-panel>
+                        <!-- Price -->
+                        <!-- <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Price
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <p class="m-0">Min: {{filterForm.controls['minPrice']['value'] || 20 | currency:'USD'}}</p>
+                            <mat-slider class="full-width mb-1 pl-0" [formControl]="filterForm.controls['minPrice']" [thumbLabel]="true" [max]="filterForm.controls['maxPrice']?.value - 5" [min]="20"></mat-slider>
+
+                            <p class="m-0">Max: {{filterForm.controls['maxPrice']['value'] || 40 | currency:'USD'}}</p>
+                            <mat-slider class="full-width pl-0" [formControl]="filterForm.controls['maxPrice']" [thumbLabel]="true" [max]="50" [min]="filterForm.controls['minPrice']?.value + 5"></mat-slider>
+                        </mat-expansion-panel> -->
+                        <!-- Ratings -->
+                        <!-- <mat-expansion-panel>
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    Ratings
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <p class="m-0">Min: {{filterForm.controls['minRating']['value'] || 1}}</p>
+                            <mat-slider class="full-width mb-1" [formControl]="filterForm.controls['minRating']" [thumbLabel]="true" [max]="filterForm.controls['maxRating']?.value - 1" [min]="1"></mat-slider>
+
+                            <p class="m-0">Max: {{filterForm.controls['maxRating']['value'] || 5}}</p>
+                            <mat-slider class="full-width mb-1" [formControl]="filterForm.controls['maxRating']" [thumbLabel]="true" [max]="5" [min]="filterForm.controls['minRating']?.value + 1"></mat-slider>
+                        </mat-expansion-panel> -->
+                    </mat-accordion>
+                </form>
+            </div>
+        </mat-sidenav>
+        <div class="shop-wrap" fxLayout="row" fxLayoutWrap="wrap">
+            <!-- Filters -->
+            <!-- Right side -->
+            <div class="full-width">
+                <!-- Search Form -->
+                <div fxLayout="row" fxLayout.lt-sm="column" class="shop-top-toolbar">
+                    <button mat-icon-button class="mr-1" (click)="toggleSideNav()"><mat-icon>short_text</mat-icon> </button>
+                    <div class="product-search-wrap">
+                        <form [formGroup]="filterForm" (ngSubmit)="searchSubmit()">
+                            <input type="text" name="searchProduct" placeholder="Search product" class="product-search default-bg full-width" [formControl]="filterForm.controls['filterValue']">
+                        </form>
+                    </div>
+                    <button mat-flat-button class="ml-1" [color]="'accent'" (click)="ngOnInit()">Reset Filter</button>
+                    <!-- View change buttons and cart -->
+                    <span fxFlex='1'></span>
+                    <mat-checkbox [(ngModel)]="sellectAll" (change)="selectAllCart()">All</mat-checkbox>
+                    <span fxFlex></span>
+                    <div [fxHide.lt-md]="true">
+                        <button mat-icon-button [color]="viewMode === 'list-view' ? 'primary' : ''" (click)="viewMode = 'list-view'">
+                <mat-icon>format_list_bulleted</mat-icon>
+              </button>
+                        <button mat-icon-button [color]="viewMode === 'grid-view' ? 'primary' : ''" (click)="viewMode = 'grid-view'">
+                <mat-icon>apps</mat-icon>
+              </button>
+                    </div>
+                    <span fxFlex="20px"></span>
+                    <button mat-raised-button color="primary" routerLink="/course/cart">
+              <mat-icon>shopping_cart</mat-icon> Cart ({{ cartCount || ''}})
+            </button>
+                </div>
+                <!-- Products container -->
+                <div class="product-container" [ngClass]="{'list-view': viewMode === 'list-view'}">
+                    <!-- Product Box -->
+                    <div class="product-wrap" *ngFor="let product of products$ | async; let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                        <div class="product-inner default-bg">
+                            <!-- <div *ngIf="product?.badge?.text" class="product-badge mat-elevation-z7" [ngStyle]="{background: product?.badge?.color || '#f44336'}">
+                                <span>{{product?.badge?.text}}</span>
+                            </div> -->
+                            <div class="featured-img" [routerLink]="['/course/products/', product._id]">
+                                <img style="height: 170px;" [src]="product.image" alt="">
+                            </div>
+                            <div class="info-wrap p-1">
+                                <div class="main-info">
+                                    <h3 class="title" [routerLink]="['/course/products/', product._id]">{{ ((product ||{}).name ||{}).length>=21 ? product.name.substring(0, 21) + '...' : product.name}}</h3>
+                                    <p class="text-muted p-line"><strong>Subject:</strong> {{product?.subjectName}}</p>
+                                    <p class="text-muted p-line"><strong>Category:</strong> {{product?.categoryName}}</p>
+                                    <p class="text-muted p-line"><strong>Tags:</strong> <span> {{product?.headline}} </span> </p>
+                                </div>
+                                <div class="actions">
+                                    <div class="price-rating">
+
+                                        <div class="price">
+                                            <span>₹{{product?.price}}</span>
+                                            <!-- <del class="text-muted">{{product?.price}}</del> -->
+                                        </div>
+                                        <div class="product-rating" *ngIf="viewMode === 'grid-view'" style="padding-right: 10px;">
+                                            <!-- <star-rating [rating]="product.totalRating" [starType]="'svg'" [readOnly]="true" [size]="'small'" [staticColor]="'ok'"></star-rating> -->
+                                            Rating: <small class="text-muted"> {{product.totalRating || 0}}</small>
+                                        </div>
+                                    </div>
+                                    <span fxFlex></span>
+                                    <div class="add-to-cart">
+                                        <button mat-icon-button (click)="selectPro(product._id)">
+                        <mat-icon [color]="'accent'">add_shopping_cart</mat-icon>
+                      </button>
+                                        <mat-checkbox value="true" [(ngModel)]="cartCh['pro_'+product._id]" (change)="selectPro(product._id)">
+                                        </mat-checkbox>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Visible when viewMode === list-view -->
+                            <div class="more-info-wrap p-1" *ngIf="viewMode === 'list-view'">
+                                <div class="more-info">
+                                    <div class="more-actions mb-1">
+                                        <div class="product-rating">
+                                            Rating: <small class="text-muted">{{product.totalRating || 0}}</small>
+                                        </div>
+                                        <span fxFlex></span>
+                                        <button mat-icon-button>
+                        <mat-icon>playlist_add</mat-icon>
+                      </button>
+                                        <button mat-icon-button>
+                        <mat-icon>favorite</mat-icon>
+                      </button>
+                                    </div>
+
+                                    <div>
+                                        {{product.description || ''}}
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <!-- End Product -->
+
+                    <div class="products-pagination">
+                        <mat-paginator [pageIndex]="items.offset" (page)="setPage($event)" [length]="items.total" [pageSize]="items.limit" [pageSizeOptions]="paginatlimit">
+                        </mat-paginator>
+                    </div>
+
+                </div>
+                <!-- End Products container -->
+            </div>
+
+        </div>
+    </mat-sidenav-container>
+</div>

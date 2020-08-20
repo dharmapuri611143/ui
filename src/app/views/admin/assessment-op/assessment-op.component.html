@@ -1,0 +1,174 @@
+<div fxLayout="row wrap" class="mt-8" [@animate]="{value:'*',params:{y:'25px',delay:'500ms'}}">
+    <div fxFlex="100">
+        <!-- Time line -->
+        <div fxLayout="row wrap" fxLayoutWrap="nowrap">
+            <div fxFlex="65" fxFlex.lg="65" fxFlex.sm="100" fxFlex.xs="100">
+                <mat-card>
+                    <mat-card-title>
+                        Assign Assessment
+                        <span fxFlex></span>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <form [formGroup]="assAssForm" (ngSubmit)="sendAssessment()">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label value="">--Root Category--</mat-label>
+                                <mat-select #rootaCVal formControlName="rootCategory" name="rootCategory" (selectionChange)="onRootCategoryChange(rootaCVal.value); getAssessment()">
+                                    <mat-option>---- Select Root Category ----</mat-option>
+                                    <mat-option *ngFor="let item of rootCategories" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Category--</mat-label>
+                                <mat-select #caVal formControlName="category" name="category" (selectionChange)="onCategoryChange(caVal.value); getAssessment()">
+                                    <mat-option value="">---- Select Category ----</mat-option>
+                                    <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Subject--</mat-label>
+                                <mat-select #subaVal formControlName="subject" name="subject" (selectionChange)="getCourses({subjectName: subaVal.value}); getAssessment()">
+                                    <mat-option value="">---- Subject Name ----</mat-option>
+                                    <mat-option *ngFor="let item of subjects" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>---- Assessment ----</mat-label>
+                                <mat-select #assessmentV formControlName="_id" name="_id">
+                                    <mat-option value="">--select--</mat-option>
+                                    <mat-option *ngFor="let assessment of assessments" [value]="assessment.id">{{assessment.name}} -- {{assessment.type}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <button mat-raised-button color="primary" [disabled]="assAssForm.invalid">Assign</button>
+                        </form>
+                    </mat-card-content>
+                    <mat-card-actions>
+
+                    </mat-card-actions>
+                    <mat-card-footer>
+
+                    </mat-card-footer>
+                </mat-card>
+            </div>
+        </div>
+        <div fxLayout="row wrap" fxLayoutWrap="nowrap">
+            <div fxFlex="65" fxFlex.lg="65" fxFlex.sm="100" fxFlex.xs="100">
+                <mat-card>
+                    <mat-card-title>
+                        List view
+                        <span fxFlex></span>
+                        <form [formGroup]="filterForm" (ngSubmit)="searchSubmit()">
+                            <input formControlName="filterQuery" type="text" name="filterQuery" placeholder="Search product" class="product-search default-bg full-width">
+                        </form>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div fxLayout="row wrap" [@animate]="{value:'*',params:{delay:'600ms',scale:'.9'}}">
+                            <div fxFlex="50" fxFlex.lg="50" fxFlex.sm="50" fxFlex.xs="100" *ngFor="let assessment of items.docs; let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                                <mat-card>
+                                    <mat-card-header>
+                                        <h3><a [routerLink]="['/admin/qlist']" [queryParams]="{ id : assessment._id}"> {{assessment.name}}</a></h3>
+                                    </mat-card-header>
+                                    <mat-card-content>
+                                        <div>Subject: {{assessment.subject}}</div>
+                                        <p>{{assessment.description}}</p>
+                                    </mat-card-content>
+                                    <mat-card-actions>
+                                        <button mat-raised-button color="primary" (click)="showAsmt(assessment)">Edit</button>
+                                        <span fxFlex></span>
+                                        <button mat-raised-button color="primary" *ngIf="assessment.status !== 'published'" (click)="pulishAsmt({_id: assessment._id,  type: assessment.type})">Publish</button>
+                                        <span fxFlex></span>
+                                        <button mat-raised-button color="primary" [routerLink]="['/admin/qlist']" [queryParams]="{ id : assessment._id, status: assessment.status}">Add/Show Questions</button>
+                                    </mat-card-actions>
+
+                                </mat-card>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <button mat-raised-button color="primary" (click)="addAssessment()">Add Assessment</button>
+                    </mat-card-actions>
+                    <mat-card-footer>
+                        <div class="products-pagination">
+                            <mat-paginator [pageIndex]="items.offset" (page)="setPage($event)" [length]="items.total" [pageSize]="items.limit" [pageSizeOptions]="paginatlimit">
+                            </mat-paginator>
+                        </div>
+                    </mat-card-footer>
+                </mat-card>
+            </div>
+            <div fxFlex="35" fxFlex.lg="35" fxFlex.sm="50" fxFlex.xs="100">
+                <mat-card>
+                    <mat-card-title>
+                        Assessment Form
+                    </mat-card-title>
+                    <mat-card-content>
+                        <form [formGroup]="assForm" (ngSubmit)="onSaveDetails()">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Assessment Name</mat-label>
+                                <input matInput formControlName="name" type="text" name="name" placeholder="Assessment Name" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label value="">--Type--</mat-label>
+                                <mat-select #ctype formControlName="type" name="type" (selectionChange)="onType(ctype.value)">
+                                    <mat-option>---- Select Type ----</mat-option>
+                                    <mat-option value="Course">Course</mat-option>
+                                    <mat-option value="Quiz">Quiz</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label value="">--Root Category--</mat-label>
+                                <mat-select #rootCVal formControlName="rootCategory" name="rootCategory" (selectionChange)="onRootCategoryChange(rootCVal.value)">
+                                    <mat-option>---- Select Root Category ----</mat-option>
+                                    <mat-option *ngFor="let item of rootCategories" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Category--</mat-label>
+                                <mat-select #cVal formControlName="category" name="category" (selectionChange)="onCategoryChange(cVal.value)">
+                                    <mat-option value="">---- Select Category ----</mat-option>
+                                    <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Subject--</mat-label>
+                                <mat-select #subVal formControlName="subject" name="subject" (selectionChange)="getCourses({subjectName: subVal.value})">
+                                    <mat-option value="">---- Subject Name ----</mat-option>
+                                    <mat-option *ngFor="let item of subjects" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Course--</mat-label>
+                                <mat-select formControlName="courseId" name="courseId">
+                                    <mat-option value="">---- Select Course ----</mat-option>
+                                    <mat-option *ngFor="let item of courses" [value]="item._id">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>duration</mat-label>
+                                <input matInput formControlName="duration" type="number" name="duration" placeholder="Duration" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Start Date</mat-label>
+                                <input matInput formControlName="startDate" type="date" name="startDate" placeholder="Start Date" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>End Date</mat-label>
+                                <input matInput formControlName="endDate" type="date" name="endDate" placeholder="End Date" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Description</mat-label>
+                                <textarea matInput formControlName="description" name="description" placeholder="Description"></textarea>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Instructions</mat-label>
+                                <textarea matInput formControlName="instructions" name="instructions" placeholder="Instructions"></textarea>
+                            </mat-form-field>
+                            <button class="mb-8" mat-raised-button color="primary" [disabled]="assForm.invalid">Submit</button>
+                        </form>
+                    </mat-card-content>
+                    <mat-card-actions>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+
+    </div>
+</div>

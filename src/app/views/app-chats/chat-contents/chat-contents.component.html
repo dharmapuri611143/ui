@@ -1,0 +1,88 @@
+<mat-toolbar color="primary" class="chat-toolbar">
+    <!-- sidebar toggle button -->
+    <button mat-icon-button [style.alignSelf]="'center'" class="mr-1" (click)="matSidenav.toggle()"><mat-icon>short_text</mat-icon>
+    </button>
+
+    <!-- Selected active user -->
+    <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center" *ngIf="(activeContact ||{})._id">
+        <a [ngClass]="{online: activeContact.status}" class="toolbar-avatar mr-1">
+            <img src="assets/images/profile-blank.png" alt="">
+            <span class="status-dot"></span>
+        </a>
+        <div fxLayout="column">
+            <h6 class="m-0 font-normal fz-1">{{activeContact.firstName}}</h6>
+        </div>
+    </div>
+
+    <!-- Right side top menu -->
+    <span fxFlex></span>
+    <button [style.alignSelf]="'center'" mat-icon-button [matMenuTriggerFor]="toolbarDDMenu" class="topbar-button-right hidden-on-open">
+        <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #toolbarDDMenu="matMenu">
+        <button mat-menu-item><mat-icon>account_circle</mat-icon>Contact info</button>
+        <button mat-menu-item><mat-icon>volume_mute</mat-icon>Mute</button>
+        <button mat-menu-item><mat-icon>delete</mat-icon>Clear chat</button>
+    </mat-menu>
+</mat-toolbar>
+
+<div *ngIf="chatCollection && !chatService.collectionLoading">
+    <!-- Main chat body -->
+    <div class="conversations-hold" [perfectScrollbar]>
+        <!-- single chat item -->
+        <div class="single-conversation" fxLayout="row" *ngFor="let chat of chatCollection" [ngClass]="{sender: chat.createdBy === activeContact._id, me: chat.createdBy !== activeContact._id}">
+            <!-- <a *ngIf="chat.createdBy !== activeContact._id" href="" class="toolbar-avatar" [ngClass]="{online: activeContact.status}">
+                <img src="assets/images/profile-blank.png" alt="">
+                <span class="status-dot"></span>
+            </a>
+            <a *ngIf="chat.createdBy === activeContact._id" href="" class="toolbar-avatar" [ngClass]="{online: activeContact.status}">
+                <img src="assets/images/profile-blank.png" alt="">
+                <span class="status-dot"></span>
+            </a> -->
+
+            <div class="full-width" style="background: #e3eaf482;" *ngIf="chat.createdBy !== userDetails._id">
+                <div>
+                    <!-- <h5 class="chat-username text-muted">{{activeContact?.username}}</h5> -->
+                    <!-- <div class="conversation-msg"> -->
+                    {{chat.text}}
+                    <!-- </div> -->
+                    <p class="chat-date text-muted">{{chat.created | relativeTime}}</p>
+                </div>
+            </div>
+            <div class="full-width" style="text-align: right; background: #edc0fd82;" *ngIf="chat.createdBy === userDetails._id">
+                <!-- <h5 class="chat-username text-muted">Me</h5> -->
+                <!-- <div class="conversation-msg"> -->
+                {{chat.text}}
+                <!-- </div> -->
+                <p class="chat-date text-muted">{{chat.created | relativeTime}}</p>
+            </div>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <!-- Input box and send button -->
+    <div class="chat-input-actions">
+        <form [formGroup]="vForm" class="inputForm" (ngSubmit)="sendMessage()" (keydown.enter)="sendMessage()">
+            <mat-form-field class="full-width mr-1">
+                <mat-label>Type your message</mat-label>
+                <textarea class="inputText" matInput formControlName="text" placeholder="Type your message" name="text"></textarea>
+            </mat-form-field>
+            <button style="top: -73px; float: right;" mat-fab color="primary" type="submit" [disabled]="vForm.invalid"><mat-icon>send</mat-icon></button>
+        </form>
+    </div>
+</div>
+
+<div class="chat-intro" *ngIf="chatService.collectionLoading">
+    <div class="chat-loader">
+        <div class="spinner">
+            <div class="double-bounce1 mat-bg-accent"></div>
+            <div class="double-bounce2 mat-bg-primary"></div>
+        </div>
+    </div>
+</div>
+
+<div class="chat-intro" *ngIf="!chatCollection && !chatService.collectionLoading" fxLayout="column" fxLayoutAlign="center center">
+    <mat-card class="text-center" fxLayout="row" fxLayoutAlign="center center" [ngStyle]="{height: '220px', width: '220px', borderRadius: '50%'}">
+        <mat-icon color="primary" class="text-60" [ngStyle]="{height: '60px', width: '60px'}">chat</mat-icon>
+    </mat-card>
+    <h6>Select a contact!</h6>
+</div>

@@ -1,0 +1,178 @@
+<div class="handle">
+    <button mat-fab color="primary" (click)="openCustumizer(true)">
+        <mat-icon class="text-white">chat</mat-icon>
+    </button>
+</div>
+<div id="app-customizer" *ngIf="isCustomizerOpen" [@animate]="{value:'*',params:{y:'250px',delay:'200ms'}}">
+    <mat-card class="p-0">
+        <mat-card-content *ngIf="viewMode === 'chats'">
+            <mat-card class="p-0">
+                <mat-toolbar color="primary" class="chat-toolbar">
+                    <!-- Selected active user -->
+                    <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center">
+                        <a [ngClass]="{online: 'online' === 'online'}" class="toolbar-avatar mr-1">
+                            <img src="assets/images/profile-blank.png" alt="">
+                            <!-- <img *ngIf="!(userDetails ||{}).image" src="assets/images/profile-blank.png" alt=""> -->
+                            <!-- <img *ngIf="(userDetails ||{}).image" [src]="(userDetails ||{}).image" alt=""> -->
+                            <!-- <span class="status-dot"></span> -->
+                        </a>
+                        <div fxLayout="column">
+                            <!-- <h6 class="m-0 font-normal fz-1">{{userDetails.firstName}}</h6> -->
+                            <h6 class="m-0 font-normal fz-1">Amida ChatBot</h6>
+                        </div>
+                    </div>
+
+                    <span fxFlex></span>
+                    <button class="card-control" mat-icon-button (click)="openCustumizer(false)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                </mat-toolbar>
+                <mat-card-content [perfectScrollbar] style="min-height: 50vh">
+                    <div class="" fxLayout="row" *ngFor="let chat of chats">
+                        <div class="full-width">
+                            <!-- <a *ngIf="chat.createdBy !== ((currentUser ||{}).createdBy ||{})._id" href="" class="toolbar-avatar" [ngClass]="{online: currentUser.status}">
+                                <img src="assets/images/profile-blank.png" alt="">
+                                <span class="status-dot"></span>
+                            </a>
+                            <a *ngIf="chat.createdBy === ((currentUser ||{}).createdBy ||{})._id" href="" class="toolbar-avatar" [ngClass]="{online: currentUser.status}">
+                                <img src="assets/images/profile-blank.png" alt="">
+                                <span class="status-dot"></span>
+                            </a> -->
+                            <div class="full-width" style="background: #e3eaf482; border-radius: 25px;" *ngIf="chat.createdBy === 'User'">
+                                <div>
+                                    <!-- <h5 class="chat-username text-muted">Me</h5> -->
+                                    <div class="conversation-msg" style="padding: top 10px;">
+                                        {{chat.text}}
+                                    </div>
+                                    <p class="chat-date text-muted">{{chat.created | date:'shortTime'}}</p>
+                                </div>
+
+                            </div>
+
+                            <div class="full-width" style="text-align: right; background: #edc0fd82; border-radius: 25px;" *ngIf="chat.createdBy === 'AmidaBot'">
+                                <!-- <h5 class="chat-username text-muted">Admin</h5> -->
+                                <div class="conversation-msg" style="padding: top 10px;">
+                                    <div [innerHTML]="chat.text">
+                                    </div>
+                                </div>
+                                <p class="chat-date text-muted">{{chat.created | date:'shortTime'}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="full-width" style="text-align: right; background: #edc0fd82; border-radius: 25px;" *ngIf="botWriting">
+                        <!-- <h5 class="chat-username text-muted">Admin</h5> -->
+                        <div class="conversation-msg">
+                            Typing ..
+                        </div>
+                        <p class="chat-date text-muted">now</p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card-actions>
+                <!-- Input box and send button -->
+                <div class="chat-input-actions">
+                    <form [formGroup]="vForm" (ngSubmit)="sendMessage()">
+                        <!-- <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>--Category--</mat-label>
+                            <mat-select formControlName="category">
+                                <mat-option value="">---- Select Category ----</mat-option>
+                                <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                                <mat-option value="other">Other</mat-option>
+                            </mat-select>
+                        </mat-form-field> -->
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Type your message</mat-label>
+                            <textarea matInput formControlName="text" placeholder="Type your message" name="text" (keyup.enter)="sendMessage()"></textarea>
+                        </mat-form-field>
+                        <button style="top: -73px; left: 280px;" mat-raised-button color="primary" [disabled]="vForm.invalid">
+                            <mat-icon>send</mat-icon>
+                        </button>
+                    </form>
+                </div>
+            </mat-card-actions>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<div class="handlebot">
+    <button mat-fab color="accent" (click)="openBotCustumizer(true)">
+        <mat-icon class="text-white">chat</mat-icon>
+    </button>
+</div>
+<div id="app-customizerbot" *ngIf="isBotCustomizerOpen" [@animate]="{value:'*',params:{y:'250px',delay:'200ms'}}">
+    <mat-card class="p-0">
+        <mat-card-content *ngIf="viewBotMode === 'chats'">
+            <mat-card class="p-0">
+                <mat-toolbar color="primary" class="chat-toolbar">
+                    <!-- Selected active user -->
+                    <div class="active-chat-user" fxLayout="row" fxLayoutAlign="start center">
+                        <a [ngClass]="{online: 'online' === 'online'}" class="toolbar-avatar mr-1">
+                            <img src="assets/images/profile-blank.png" alt="">
+                            <!-- <img *ngIf="!(userDetails ||{}).image" src="assets/images/profile-blank.png" alt=""> -->
+                            <!-- <img *ngIf="(userDetails ||{}).image" [src]="(userDetails ||{}).image" alt=""> -->
+                            <!-- <span class="status-dot"></span> -->
+                        </a>
+                        <div fxLayout="column">
+                            <!-- <h6 class="m-0 font-normal fz-1">{{userDetails.firstName}}</h6> -->
+                            <h6 class="m-0 font-normal fz-1">Ami Bot</h6>
+                        </div>
+                    </div>
+
+                    <span fxFlex></span>
+                    <button class="card-control" mat-icon-button (click)="openBotCustumizer(false)">
+                        <mat-icon>close</mat-icon>
+                    </button>
+
+                </mat-toolbar>
+                <mat-card-content [perfectScrollbar] style="min-height: 50vh">
+                    <div class="" fxLayout="row" *ngFor="let chat of botchats">
+                        <div class="full-width">
+                            <div class="full-width" style="background: #e3eaf482; border-radius: 25px;" *ngIf="chat.createdBy === 'User'">
+                                <div>
+                                    <!-- <h5 class="chat-username text-muted">Me</h5> -->
+                                    <div class="conversation-msg" style="padding: top 10px;">
+                                        {{chat.text}}
+                                    </div>
+                                    <p class="chat-date text-muted">{{chat.created | date:'shortTime'}}</p>
+                                </div>
+
+                            </div>
+
+                            <div class="full-width" style="text-align: right; background: #edc0fd82; border-radius: 25px;" *ngIf="chat.createdBy === 'AmiBot'">
+                                <!-- <h5 class="chat-username text-muted">Admin</h5> -->
+                                <div class="conversation-msg" style="padding: top 10px;">
+                                    {{chat.text}}
+                                </div>
+                                <p class="chat-date text-muted">{{chat.created | date:'shortTime'}}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="full-width" style="text-align: right; background: #edc0fd82; border-radius: 25px;" *ngIf="botBWriting">
+                        <!-- <h5 class="chat-username text-muted">Admin</h5> -->
+                        <div class="conversation-msg">
+                            Typing ..
+                        </div>
+                        <p class="chat-date text-muted">now</p>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+            <mat-card-actions>
+                <!-- Input box and send button -->
+                <div class="chat-input-actions">
+                    <form [formGroup]="bForm" (ngSubmit)="sendBotMessage()">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Type your message</mat-label>
+                            <textarea matInput formControlName="text" placeholder="Type your message" name="text" (keyup.enter)="sendBotMessage()"></textarea>
+                        </mat-form-field>
+                        <button style="top: -73px; left: 280px;" mat-raised-button color="primary" [disabled]="bForm.invalid">
+                            <mat-icon>send</mat-icon>
+                        </button>
+                    </form>
+                </div>
+            </mat-card-actions>
+        </mat-card-content>
+    </mat-card>
+</div>

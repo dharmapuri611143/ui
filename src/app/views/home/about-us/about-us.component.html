@@ -1,0 +1,59 @@
+<section style="margin-bottom: 35px;" [@animate]="{value:'*',params:{y:'25px',delay:'300ms'}}" [ngStyle.lt-md]="{'margin-top': '50px', 'margin-bottom': '50px'}">
+    <div class="container">
+        <mat-card>
+            <mat-card-content>
+                <div class="blog-section blog-heading mat-typography" fxLayout="column" fxLayoutAlign="center center">
+                    <div>
+                        <h2 [ngStyle.lt-md]="{'margin-bottom': '15px'}">Welcome To Amida E-Learning</h2>
+                    </div>
+                    <div>
+                        <h4 [ngStyle.xs]="{'font-size': '14px'}" [ngStyle.sm]="{'font-size': '12px'}">Amida Educational Services Pvt. Ltd. is a privately owned company, with its headquarters in Hyderabad, India. The company incorporated in July, 2016 and providing services related to education. It is a dedicated portal for competitive
+                            exam preparation online. A team of well qualified professionals provide you the highly visualized, modularized self paced learning material online uninterruptedly. It would provide as much learning support as possible through
+                            visualized explanations, examples, interactivity, feedback, glossaries etc. it will make learner self sufficient. It helps you plan your preparation, track your improvement, review and get help from the expert team.</h4>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</section>
+
+<section [@animate]="{value:'*',params:{y:'25px',delay:'300ms'}}" [ngStyle.lt-md]="{'margin-bottom': '50px'}">
+    <div class="container">
+        <div fxLayout="row" fxLayoutWrap="nowrap" fxLayout.lt-sm="column" fxLayoutGap="20px">
+            <div fxFlex="32">
+                <mat-card class="p-0 m-0">
+                    <img src="assets/images/about_1.jpg">
+                    <mat-card-content>
+                        <h5 class="mat-headline" [ngStyle.sm]="{'font-size': '14px'}">Our Stories</h5>
+                        <p class="mat-subheading-2" [ngStyle.sm]="{'font-size': '11px'}">
+                            Amida Educational Services Pvt. Ltd. is a privately owned company, with its headquarters in Hyderabad, India. The company incorporated in July, 2016 and providing services related to education. It is a dedicated portal for competitive exam preparation
+                            online.
+                        </p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div fxFlex="32">
+                <mat-card class="p-0 m-0">
+                    <img src="assets/images/about_2.jpg">
+                    <mat-card-content>
+                        <h5 class="mat-headline" [ngStyle.sm]="{'font-size': '14px'}">Our Mission</h5>
+                        <p class="mat-subheading-2" [ngStyle.sm]="{'font-size': '11px'}">
+                            Amida Educational Services’ mission is to help India learn by self.
+                        </p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div fxFlex="32">
+                <mat-card class="p-0 m-0">
+                    <img src="assets/images/about_3.jpg">
+                    <mat-card-content>
+                        <h5 class="mat-headline" [ngStyle.sm]="{'font-size': '14px'}">Our Vision</h5>
+                        <p class="mat-subheading-2" [ngStyle.sm]="{'font-size': '11px'}">
+                            AMIDA has a vision to make ekalavyas (self learners) by providing engaging, personalized and equitable learning opportunities to encourage academic excellence through innovative technological solutions
+                        </p>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</section>

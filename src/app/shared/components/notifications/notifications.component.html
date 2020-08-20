@@ -1,0 +1,29 @@
+<div class="text-center mat-bg-primary pt-1 pb-1">
+    <h6 class="m-0">Notifications</h6>
+</div>
+<mat-nav-list class="notification-list" role="list">
+    <!-- Notification item -->
+    <mat-list-item *ngFor="let n of notifications" (click)="readNote(n._id)" class="notific-item" role="listitem" routerLinkActive="open">
+        <mat-icon *ngIf="n.type==='Inquiry'" [color]="'accent'" class="notific-icon mr-1">event_note</mat-icon>
+        <a *ngIf="n.type==='Inquiry'" [routerLink]="['/admin/inquirylist']">
+            <div class="mat-list-text">
+                <h4 class="message">{{n.msg}}</h4>
+                <small class="time text-muted">{{n.created | date: 'medium'}}</small>
+            </div>
+        </a>
+        <mat-icon *ngIf="n.type==='Purchase'" [color]="'primary'" class="notific-icon mr-1">check_box</mat-icon>
+        <a *ngIf="n.type==='Purchase'" [routerLink]="['/admin/orders']">
+            <div class="mat-list-text">
+                <h4 class="message">{{n.msg}}</h4>
+                <small class="time text-muted">{{n.created | date: 'medium'}}</small>
+            </div>
+        </a>
+        <mat-icon *ngIf="n.type==='Assessment'" [color]="'primary'" class="notific-icon mr-1">assignment_turned_in</mat-icon>
+        <a *ngIf="n.type==='Assessment'" [routerLink]="['/student/assesss']">
+            <div class="mat-list-text">
+                <h4 class="message">{{n.msg}}</h4>
+                <small class="time text-muted">{{n.created | date: 'medium'}}</small>
+            </div>
+        </a>
+    </mat-list-item>
+</mat-nav-list>

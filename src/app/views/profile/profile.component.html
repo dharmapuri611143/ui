@@ -1,0 +1,53 @@
+<div fxLayout="row wrap" class="mb-16">
+    <div fxFlex="100" fxFlex.gt-md="300px" fxFlex.gt-sm="50">
+        <mat-card class="profile-sidebar mb-1 pb-0">
+            <div class="propic text-center">
+                <img *ngIf="!(userDetails ||{}).image" src='assets/images/profile-blank.png' alt="">
+                <img *ngIf="(userDetails ||{}).image" [src]="(userDetails ||{}).image" alt="">
+            </div>
+            <div class="profile-title text-center mb-1">
+                <div class="main-title"><b>{{userDetails.username}}</b></div>
+                <div class="subtitle mb-05">{{userDetails.role}}</div>
+                <div class="subtitle mb-05">Created On: {{userDetails.created | date}}</div>
+                <!-- <div class="text-muted">{{userDetails.content}}</div> -->
+            </div>
+
+            <div class="profile-nav">
+                <mat-nav-list>
+                    <mat-list-item *ngIf="userDetails.role==='Service Provider'" routerLink="/profile/overview" routerLinkActive="list-item-active">
+                        <mat-icon>home</mat-icon>
+                        Overview
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item routerLink="/profile/settings" routerLinkActive="list-item-active">
+                        <mat-icon>settings</mat-icon>
+                        Settings
+                    </mat-list-item>
+                    <mat-divider></mat-divider>
+                    <mat-list-item routerLink="/profile/blank" routerLinkActive="list-item-active">
+                        <mat-icon>content_paste</mat-icon>
+                        Blank
+                    </mat-list-item>
+                </mat-nav-list>
+            </div>
+        </mat-card>
+        <mat-card class="default">
+            <mat-card-title>Contact Information</mat-card-title>
+            <mat-card-content class="pt-0">
+                <mat-list>
+                    <mat-list-item>
+                        <mat-icon class="mr-1">email</mat-icon> {{userDetails.email}}</mat-list-item>
+                    <mat-list-item>
+                        <mat-icon class="mr-1">phone</mat-icon>{{userDetails.phone}}</mat-list-item>
+                    <mat-list-item>
+                        <mat-icon class="mr-1">add_location</mat-icon>{{((userDetails ||{}).address ||{}).line1}}</mat-list-item>
+                </mat-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <!-- Profile Views -->
+    <div fxFlex="100" fxFlex.gt-sm="50" fxFlex.gt-md="calc(100% - 300px)">
+        <router-outlet></router-outlet>
+    </div>
+</div>

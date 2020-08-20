@@ -1,0 +1,282 @@
+<div class="product-details-wrap m-333" fxLayout="row wrap" fxLayout.lt-md="column" [@animate]="{value:'*',params:{delay: '100ms', x:'50px'}}">
+    <div fxLayout="row" fxFlex="100" class="mb-05">
+        <button mat-icon-button class="text-muted" routerLink="/course"><mat-icon>chevron_left</mat-icon> <span >Back to Shop</span></button>
+        <span fxFlex></span>
+        <span fxFlex="20px"></span>
+        <button mat-raised-button color="primary" routerLink="/course/cart">
+        <mat-icon>shopping_cart</mat-icon> Cart ({{cartCount || ''}})</button>
+    </div>
+    <div fxFlex.lt-md="auto" fxFlex="60" class="product-photos-wrap">
+        <mat-sidenav-container style="height: 500px;">
+            <mat-sidenav EgretSideNavToggle class="shop-sidebar default-light-bg">
+                <div class="shop-filters-wrap">
+                    <mat-accordion multi="false" displayMode="flat" *ngFor="let vobj of vContentList">
+                        <mat-expansion-panel expanded="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <h3><b>{{vobj.title}}</b></h3>
+                                </mat-panel-title>
+                            </mat-expansion-panel-header>
+                            <ul class="product-categories">
+                                <li *ngFor="let vd of vobj.videoUrl" [ngClass]="{'fw-500': vd.title === activeCategory}">
+                                    <a *ngIf="vd?.vFlag" (click)="openLessonV(vd, vobj.title)">
+                                        <mat-icon style="font-size: 18px; color: green;">lock_open</mat-icon><span>{{vd.title}}</span>
+                                    </a>
+                                    <a *ngIf="!vd?.vFlag">
+                                        <mat-icon style="font-size: 18px;color: red;">lock</mat-icon> <span>{{vd.title}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+            </mat-sidenav>
+            <div fxLayout="row" fxLayoutWrap="wrap">
+                <div class="full-width">
+                    <!-- <div fxLayout="row" fxLayout.lt-sm="column" class="shop-top-toolbar">
+                        <button mat-icon-button class="mr-1" (click)="toggleSideNav()"><mat-icon>short_text</mat-icon> </button>
+                    </div> -->
+                    <mat-card>
+                        <mat-card-title>
+                            <span>
+                                        {{(courseDetails || {}).headline}} > {{vTitle + ' > ' + (selectedVideo ||{}).title}}
+                                </span>
+                        </mat-card-title>
+                        <mat-card-content>
+                            <div *ngIf="selectedVideo && selectedVideo.path">
+                                <!-- style="max-width: 982px; max-height: 545px;" -->
+                                <video fxFlex.xl="800px" oncontextmenu="return false;" [src]="selectedVideo.path" type="video/mp4" id="sub-video" controls controlsList="nodownload" onended="run()">
+                                                        </video>
+                            </div>
+                            <div *ngIf="!(selectedVideo && selectedVideo.path)">
+                                Content Not Available
+                            </div>
+                        </mat-card-content>
+                    </mat-card>
+                </div>
+            </div>
+        </mat-sidenav-container>
+    </div>
+
+    <div *ngIf="(courseDetails ||{}).headline" style="padding: 21px;" fxFlex="40" class="product-content-wrap" [@animate]="{value:'*',params:{delay: '100ms', x:'50px'}}">
+        <div class="product-rating" *ngIf="courseDetails?.rating">
+            <!-- <star-rating [rating]="courseDetails?.rating" [starType]="'svg'" [readOnly]="true" [size]="'medium'" [staticColor]="'ok'">
+            </star-rating> -->
+            <small class="text-muted">{{courseDetails?.rating}} ({{courseDetails?.ratingCount}})</small>
+        </div>
+        <div fxLayout="row">
+            <h1 class="title">{{courseDetails?.headline}}
+                <p style="font-weight: 700; color: #661382;">({{courseDetails?.subjectCode}})</p>
+            </h1>
+
+        </div>
+
+        <div class="main-info mb-1">
+            <p class="text-muted p-line"><strong>Subject:</strong> <span class="mat-color-default"> {{courseDetails?.subjectName}}</span></p>
+            <p class="text-muted p-line"><strong>Category:</strong> <span class="mat-color-default"> {{courseDetails?.categoryName}}</span></p>
+        </div>
+        <div class="product-options mb-1">
+            <span class="price">₹ {{courseDetails?.price}}</span>
+            <mat-divider class="mb-1"></mat-divider>
+            {{courseDetails?.description}}
+        </div>
+        <div fxLayout="row">
+            <button mat-raised-button color="accent" (click)="addToCart(courseDetails?._id)"><mat-icon>add_shopping_cart</mat-icon> Add to Cart</button>
+            <span fxFlex="8px"></span>
+            <button mat-raised-button style="background: green;" (click)="buyNow(courseDetails?._id)"><mat-icon>shopping_cart</mat-icon> Buy Now</button>
+            <span fxFlex="8px"></span>
+            <button mat-raised-button color="primary" routerLink="/course"><mat-icon>chevron_left</mat-icon> Back to Shop</button>
+        </div>
+
+        <div fxLayout="row" style="padding: 10px;">
+            <mat-icon class="html-icon" (click)="openHtmlCont(courseDetails.htmlcontent)">play_circle_outline</mat-icon>
+            <img class="html-img" [src]="courseDetails.image">
+        </div>
+        <div fxLayout="row">
+            <h3 style="color: #f29838;"><b>To Watch Interactive Videos, Please Click on play button. If asked password use "amida".</b></h3>
+        </div>
+    </div>
+</div>
+<div>
+
+</div>
+<div fxLayout="row wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="33">
+        <mat-card class="default">
+            <mat-card-title>About Course
+                <span fxFlex></span> {{courseDetails?.level}}
+            </mat-card-title>
+            <mat-card-content>
+                {{courseDetails?.about}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="33">
+        <mat-card class="default">
+            <mat-card-title>Prerequisites for this course</mat-card-title>
+            <mat-card-content>
+                {{courseDetails?.coursePrerequisites}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="33">
+        <mat-card class="default">
+            <mat-card-title>Keywords</mat-card-title>
+            <mat-card-content>
+                {{courseDetails?.keywords}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="33">
+        <mat-card class="default">
+            <mat-card-title>Benefits</mat-card-title>
+            <mat-card-content>
+                {{courseDetails?.benefits}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="33">
+        <mat-card class="default">
+            <mat-card-title>Description</mat-card-title>
+            <mat-card-content>
+                {{courseDetails?.description}}
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+<div fxLayout="row wrap">
+
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="default">
+            <mat-card-title>Review & Rating</mat-card-title>
+            <mat-card-content>
+                <div class="timeline" *ngIf="reviews.length>0">
+                    <div class="timeline-item" *ngFor="let review of reviews">
+                        <div class="timeline-badge">
+                            <img *ngIf="!((review ||{}).reviwedBy ||{}).image" src="assets/images/profile-blank.png" alt="">
+                            <img *ngIf="((review ||{}).reviwedBy ||{}).image" [src]="((review ||{}).reviwedBy ||{}).image" alt="">
+                        </div>
+                        <div class="timeline-body">
+                            <div class="timeline-body-top" fxLayout="row">
+                                <a href="#" class="timeline-body-title mr-1"><b>{{((review ||{}).reviwedBy ||{}).username}}</b></a>
+                                <span class="text-muted">{{review?.created | date}}</span>
+                                <span fxFlex></span>
+                            </div>
+                            <div class="timeline-body-content">
+                                <p>{{review.review}}</p>
+                            </div>
+                            <div class="timeline-body-actions">
+                                <div class="stars-example-css reviewed-rate">
+                                    <mat-icon [color]="'accent'">{{1
+                                        <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                            <mat-icon [color]="'accent'">{{2
+                                                <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                                    <mat-icon [color]="'accent'">{{3
+                                                        <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                                            <mat-icon [color]="'accent'">{{4
+                                                                <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                                                    <mat-icon [color]="'accent'">{{5
+                                                                        <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="reviews.length ===0">
+                    Review not available for this course.
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="default">
+            <mat-card-title>Video Contents</mat-card-title>
+            <mat-card-content>
+                <div *ngIf="vContentList.length>0">
+                    <div class="timeline-item" *ngFor="let vobj of vContentList; let i=index;">
+
+                        <div class="timeline-body">
+                            <div class="timeline-body-top" fxLayout="row">
+                                <h2>{{i+1}}) {{vobj.title}}</h2>
+                                <span fxFlex></span> {{vobj?.created | date}}
+                            </div>
+                            <div class="timeline-body-content">
+                                <mat-list class="compact-list mb-1">
+                                    <mat-list-item *ngFor="let vd of vobj.videoUrl; let i=index;">
+                                        {{i+1}}) {{vd.title}}
+                                    </mat-list-item>
+                                </mat-list>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="vContentList.length ===0">
+                    Course content not available.
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="default">
+            <mat-card-title>Related Courses</mat-card-title>
+            <mat-card-content class="p-0">
+                <mat-list class="compact-list mb-1">
+                    <mat-list-item class="" *ngFor="let product of relatedCourses">
+                        <a (click)="onClickRelatedC(product._id)"><img mat-list-avatar [src]="(product ||{}).image" class="mr-1" alt="tbl"></a>
+                        <div fxLayout="row" fxFlex="100">
+                            <h6 class="m-0 mr-1"><a (click)="onClickRelatedC(product._id)">{{product.headline}}</a></h6>
+                            <span fxFlex></span>
+                            <small class="text-muted mr-1 ml-1">{{product.subjectName}}</small>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <div class="text-center">
+                    <button mat-button class="full-width" [routerLink]="['/course']">View all</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+
+        <mat-card class="default">
+            <mat-card-title>FAQ LIST</mat-card-title>
+            <mat-card-content class="p-2">
+                <mat-list class="compact-list mb-1" *ngIf="faqList.length>0">
+                    <mat-list-item class="" *ngFor="let faq of faqList">
+                        <img mat-list-avatar src="assets/images/profile-blank.png" class="mr-1" alt="tbl">
+                        <div class="full-width" fxLayout="row" fxFlex="100">
+                            {{faq.heading}}
+                            <span fxFlex></span>
+                            <small class="text-muted mr-1 ml-1">{{faq.created | date}} <b> &nbsp; By: {{((faq ||{}).faqBy ||{}).username}}</b></small>
+                        </div>
+                        <div class="full-width" style="display: block;
+                        position: absolute;
+                        margin-top: 15px;
+                        margin-left: 40px;">
+                            <small class="text-muted mr-1 ml-1">{{faq.content}}</small>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <div *ngIf="faqList.length===0">
+                    FAQ not available for this course.
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="default">
+            <mat-card-title>
+                <p class="blink blink-two">Download Documents</p>
+            </mat-card-title>
+            <mat-card-content class="p-2">
+                <mat-list class="compact-list mb-1" *ngIf="((courseDetails ||{}).docs ||{}).length>0">
+                    <mat-list-item class="" *ngFor="let doc of (courseDetails ||{}).docs; let i=index;">
+                        <div class="full-width" fxLayout="row" fxFlex="100">
+                            {{i+1}}. {{spdoc(doc)}}
+                            <span fxFlex></span>
+                            <button (click)="dDocs(doc)">Download</button>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <div *ngIf="!((courseDetails ||{}).docs ||{}).length">
+                    Documents not available for this course.
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="margin-333" [@animate]="{value:'*',params:{delay: '100ms', x:'50px'}}">
+    <mat-card class="default">
+        <mat-card-title>
+            <div *ngIf="paymentStatus==='success'">
+                <mat-icon style="color: greenyellow;">done_all</mat-icon>
+                <div class="d-inline">
+                    <span><h4>Payment Success</h4></span>
+                </div>
+            </div>
+            <div *ngIf="paymentStatus==='failure'">
+                <mat-icon style="color: red;">cancel</mat-icon>
+                <div class="d-inline">
+                    <span><h4>Payment Failed</h4></span>
+                </div>
+            </div>
+            <div fxFlex></div>
+            <div *ngIf="paymentStatus==='success'">
+                <button mat-button color="primary" (click)="print()">Print Invoice </button>
+            </div>
+        </mat-card-title>
+        <mat-card-content>
+            <mat-card *ngIf="paymentStatus==='success'">
+                <mat-card-content *ngIf="(orderDetails ||{}).created">
+                    <table class="table table-responsive invoice-table table-borderless">
+                        <tbody>
+                            <tr>
+                                <td><img src="assets/images/android-icon-72x72.png" class="m-b-10" alt=""></td>
+                            </tr>
+                            <tr>
+                                <td>Amida Educational Services Pvt. Ltd.</td>
+                            </tr>
+                            <tr>
+                                <td>1-2-607/23/2/75, H 304,3RD FLOOR, SREE GRUHA LAKSHMI NIVAS,<br>KAVADIGUDA HYDERABAD- TG 500080 IN</td>
+                            </tr>
+                            <tr>
+                                <td><a href="mailto:info@amidaedutech.com" target="_top">info@amidaedutech.com</a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>+91 728-80-06-007</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-card-content>
+                <mat-card-actions>
+                    <div fxLayout="row" fxFlex="100">
+                        <div fxLayout="row" fxLayout.lt-sm="column">
+                            <div fxFlex="40">
+                                <h6>To: {{(user ||{}).firstName}}</h6>
+                                <p class="m-0">{{(user ||{}).email}}</p>
+                                <p class="m-0">{{(user ||{}).phone}}</p>
+                            </div>
+                            <div fxFlex="40">
+                                <h6>Order Information :</h6>
+                                <table class="table table-responsive invoice-table invoice-order table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <th>Date :</th>
+                                            <td>{{(orderDetails ||{}).created}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Status :</th>
+                                            <td>
+                                                <span class="label label-warning">{{((orderDetails ||{}).payment ||{}).status}}</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th>Payu Money Id :</th>
+                                            <td>
+                                                {{((orderDetails ||{}).payment ||{}).payuMoneyId}}
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div fxFlex="20">
+                                <h6 class="m-b-20">Order Number: <span>{{(orderDetails ||{}).orderId}}</span></h6>
+                                <h6 class="text-uppercase text-primary">Total Due :
+                                    <span>${{(orderDetails ||{}).amount}}</span>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div fxLayout="row" fxFlex="100">
+                        <div fxLayout="row" fxLayout.lt-sm="column">
+
+                            <div class="table-responsive">
+                                <table class="table  invoice-detail-table">
+                                    <thead>
+                                        <tr class="thead-default">
+                                            <th>Description</th>
+                                            <th>Subject</th>
+                                            <th>Code</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let course of orderDetails.course">
+                                            <td>
+                                                <h6>{{(course ||{}).headline}}</h6>
+                                            </td>
+                                            <td>{{(course ||{}).name}}</td>
+                                            <td>{{(course ||{}).subjectCode}}</td>
+                                            <td>{{course.price}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="100">
+                        <div fxLayout="row" fxLayout.lt-sm="column">
+                            <table class="table table-responsive invoice-table invoice-total">
+                                <tbody>
+                                    <tr>
+                                        <th>Sub Total :</th>
+                                        <td>${{(orderDetails ||{}).amount}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Taxes (00%) :</th>
+                                        <td>$00.00</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Discount :</th>
+                                        <td>${{(orderDetails ||{}).discount}}</td>
+                                    </tr>
+                                    <tr class="text-info">
+                                        <td>
+                                            <hr/>
+                                            <h5 class="text-primary">Total :</h5>
+                                        </td>
+                                        <td>
+                                            <hr/>
+                                            <h5 class="text-primary">${{(orderDetails ||{}).amount}}</h5>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div fxLayout="row" fxFlex="100">
+                        <div fxLayout="row" fxLayout.lt-sm="column">
+                            <div fxFlex="100">
+                                <h6>Terms And Condition :</h6>
+                                <p>here terms and conditions</p>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-actions>
+                <mat-card-footer>
+
+                </mat-card-footer>
+            </mat-card>
+            <mat-card *ngIf="paymentStatus==='failure'">
+                <mat-card-title>
+                    <mat-icon color="warn">cancel</mat-icon>
+                    <h4>Your transaction could not be processed.</h4>
+                </mat-card-title>
+                <mat-card-content>
+                    <h5>Seems there's a problem with the connection. Please try again later.</h5>
+                </mat-card-content>
+                <mat-card-actions>
+                    <button mat-raised-button color="accent" [routerLink]="['/course/cart']"> Try Again</button>
+                    <button mat-raised-button color="primary" [routerLink]="['/home']"> Back to Amida</button>
+                </mat-card-actions>
+            </mat-card>
+        </mat-card-content>
+    </mat-card>
+
+
+</div>

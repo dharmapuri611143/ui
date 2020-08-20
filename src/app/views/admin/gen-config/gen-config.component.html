@@ -1,0 +1,43 @@
+<div fxLayout="row wrap" class="mt-8" [@animate]="{value:'*',params:{y:'25px',delay:'500ms'}}">
+    <div fxFlex="100">
+        <!-- Time line -->
+
+        <mat-card class="default">
+            <mat-card-title>
+                Admin Configuration
+                <span fxFlex></span>
+                <!-- <button mat-flat-button color="primary" (click)="onSubmit()">Submit</button> -->
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap" fxLayoutWrap="nowrap">
+                    <div fxFlex="25" fxFlex.lg="25" fxFlex.sm="50" fxFlex.xs="100">
+                        <mat-card>
+                            <mat-card-title>
+                                Home Page Top Slider
+                            </mat-card-title>
+                            <mat-card-content>
+                                <div fxLayout="row" class="mb-8">
+                                    <input type="file" name="image" (change)="onImageChange($event)" multiple accept="image/*">
+                                </div>
+                                <mat-divider></mat-divider>
+
+                                <button mat-flat-button (click)="saveHomeImg()" color="primary">Upload</button>
+                            </mat-card-content>
+                            <mat-card-actions>
+                                <div style="display: inline-block;" *ngFor="let item of homeSliderList">
+                                    <div>
+                                        <img [src]="item.image" style="height: 30px; padding: 3px;">
+                                        <br/>
+                                        <button mat-icon-button (click)="deleteHomeImage({_id: item._id})"><mat-icon>delete</mat-icon></button>
+                                    </div>
+
+                                </div>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

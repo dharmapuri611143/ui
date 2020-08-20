@@ -1,0 +1,57 @@
+<div fxLayout="row wrap" fxLayoutWrap="nowrap">
+    <div fxFlex="50">
+        <mat-card>
+            <mat-card-title>
+                Order Manual Course
+            </mat-card-title>
+            <mat-card-content>
+
+                <form [formGroup]="assForm" (ngSubmit)="assignCourse()" class="example-form">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>
+                            Student Name...
+                        </mat-label>
+                        <input formControlName="fullName" name="fullName" type="text" placeholder="Student Name..." aria-label="Number" matInput [matAutocomplete]="auto">
+                        <mat-icon matPrefix>search</mat-icon>
+                        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                            <mat-option *ngFor="let item of filteredStates$ | async; let index = index" [value]="item._id">
+                                {{ item.fullName | titlecase}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label value="">--Root Category--</mat-label>
+                        <mat-select formControlName="rootCategoryName" name="rootCategoryName" (selectionChange)="showCategories()">
+                            <mat-option>---- Select Root Category ----</mat-option>
+                            <mat-option *ngFor="let item of rootCategories" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>--Category--</mat-label>
+                        <mat-select #cVal formControlName="categoryName" name="categoryName" (selectionChange)="onCategoryChange(cVal.value)">
+                            <mat-option value="">---- Select Category ----</mat-option>
+                            <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>--Subject--</mat-label>
+                        <mat-select #subVal formControlName="subjectName" name="subjectName" (selectionChange)="getCourses({subjectName: subVal.value})">
+                            <mat-option value="">---- Subject Name ----</mat-option>
+                            <mat-option *ngFor="let item of subjects" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>--Course--</mat-label>
+                        <mat-select #courseRef formControlName="courseName" name="courseName">
+                            <mat-option value="">---- Course Name ----</mat-option>
+                            <mat-option *ngFor="let item of courses" [value]="item._id">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="mb-8" mat-raised-button color="primary" [disabled]="assForm.invalid">Submit</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

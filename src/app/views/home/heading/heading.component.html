@@ -1,0 +1,35 @@
+<section class="mat-typography" [@animate]="{value:'*',params:{y:'25px',delay:'300ms'}}" [ngStyle.lt-md]="{'margin-top': '50px', 'margin-bottom': '50px'}">
+    <div class="container">
+
+        <div fxLayout="row wrap" fxLayoutAlign="center center">
+            <div fxFlex="100">
+                <mat-card>
+                    <div class="blog-section blog-heading mat-typography" fxLayout="column" fxLayoutAlign="center center">
+                        <div>
+                            <h2 [ngStyle.lt-md]="{'margin-bottom': '15px'}">SEARCH OUR PRODUCT</h2>
+                        </div>
+
+                    </div>
+                    <form>
+                        <div fxLayout="row wrap">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>
+                                    Search by Subject...
+                                </mat-label>
+                                <input [formControl]="filterText" type="text" placeholder="Search by Subject" aria-label="Number" matInput [matAutocomplete]="auto">
+                                <mat-icon matPrefix>search</mat-icon>
+
+                                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                                    <mat-option *ngFor="let item of filteredStates$ | async; let index = index" [value]="item.searchString">
+                                        {{ item.searchString | titlecase}}
+                                    </mat-option>
+                                </mat-autocomplete>
+                            </mat-form-field>
+                        </div>
+                    </form>
+                </mat-card>
+
+            </div>
+        </div>
+    </div>
+</section>

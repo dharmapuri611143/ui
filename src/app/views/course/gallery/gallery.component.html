@@ -1,0 +1,52 @@
+<mat-card class="pt-8">
+    <mat-card-title>Course Gallery</mat-card-title>
+    <mat-card-content>
+        <div class="shop-wrap mb-16" fxLayout="row" fxLayoutWrap="wrap">
+            <!-- Filters -->
+            <!-- Right side -->
+            <div class="full-width">
+                <!-- Search Form -->
+
+                <!-- Products container -->
+                <div class="product-container" [ngClass]="viewMode">
+                    <!-- Product Box -->
+                    <div class="product-wrap" *ngFor="let item of items let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                        <div class="product-inner default-bg">
+                            <div class="featured-img" [routerLink]="['/course']" [queryParams]="{filterValue: item.name }">
+                                <img style="height: 190px; padding: 15px;" [src]="item?.image" alt="">
+                            </div>
+
+                            <div class="info-wrap p-1">
+                                <div class="main-info-1">
+                                    <h3 class="title" [routerLink]="['/course']" [queryParams]="{filterValue: item.name }">{{item.name}}</h3>
+
+                                    <div>
+                                        <div class="sub-head-di">
+                                            <mat-icon color="warn">date_range</mat-icon> <span class="cal-text"> {{item.created | date}}</span></div>
+                                        <div class="sub-head-div">
+                                            <mat-icon color="warn">account_box</mat-icon> <span class="cal-text"> By Admin</span></div>
+                                    </div>
+                                    <!-- <mat-divider></mat-divider> -->
+                                    <!-- <div fxLayout="row wrap">
+                                        {{((item ||{}).summary ||{}).length ? item.summary.substring(0,120) + '...' : ''}}
+                                    </div> -->
+                                </div>
+                                <div class="actions" style="margin-top: 7px;">
+                                    <div class="price-rating">
+                                        <div class="item-but">
+                                            <button [routerLink]="['/course']" [queryParams]="{filterValue: item.name }" mat-flat-button color="primary">Related Courses <mat-icon>arrow_right_alt</mat-icon></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Product -->
+
+                </div>
+                <!-- End Products container -->
+            </div>
+
+        </div>
+    </mat-card-content>
+</mat-card>

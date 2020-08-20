@@ -1,0 +1,94 @@
+<mat-card class="default">
+    <mat-card-content>
+        <div fxLayout="row wrap" fxLayoutWrap="nowrap">
+            <div fxFlex="100" fxFlex.lg="100" fxFlex.sm="100" fxFlex.xs="100">
+                <mat-card>
+                    <mat-card-title>
+                        Free Course List
+                        <span fxFlex></span>
+                        <form [formGroup]="filterForm" (ngSubmit)="searchSubmit()">
+                            <input type="text" name="filterQuery" placeholder="Search product" class="product-search default-bg full-width" [formControl]="filterForm.controls['filterQuery']">
+                        </form>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div fxLayout="row wrap" [@animate]="{value:'*',params:{delay:'600ms',scale:'.9'}}">
+                            <div fxFlex="33" fxFlex.lg="33" fxFlex.sm="33" fxFlex.xs="100" *ngFor="let item of items.docs; let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                                <mat-card>
+                                    <a (click)="fetchById(item._id)"><img class="avatar-md rounded-circle" [src]="item.image" alt=""> <span class="course-span">{{item.title}}</span></a>
+
+                                </mat-card>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                        <div class="products-pagination">
+                            <mat-paginator [pageIndex]="items.offset" (page)="setPage($event)" [length]="items.total" [pageSize]="items.limit" [pageSizeOptions]="paginatlimit">
+                            </mat-paginator>
+                        </div>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card class="mt-16" [@animate]="{value:'*',params:{y:'50px',delay:'300ms'}}">
+    <mat-card-title>
+        Add/Update Free Material
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row wrap">
+            <div fxLayout="row" fxFlex="100">
+                <mat-card style="width: 100%;">
+                    <mat-card-content>
+                        <quill-editor theme="snow" [(ngModel)]="editorData" (onContentChanged)="onContentChanged()" onSelectionChanged="onSelectionChanged()"></quill-editor>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div fxLayout="row" fxFlex="50">
+                <form [formGroup]="itemForm" (ngSubmit)="submit()">
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column">
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Title</mat-label>
+                            <input matInput name="title" formControlName="title" placeholder="Title">
+                        </mat-form-field>
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label value="">--Root Category--</mat-label>
+                            <mat-select #rootCVal formControlName="rootCategoryName" name="rootCategoryName" (selectionChange)="showCategories(rootCVal.value)">
+                                <mat-option>---- Select Root Category ----</mat-option>
+                                <mat-option *ngFor="let item of rootCategories" [value]="item.name">{{item.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>--Category--</mat-label>
+                            <mat-select #cVal formControlName="categoryName" name="categoryName" (selectionChange)="onCategoryChange(cVal.value)">
+                                <mat-option value="">---- Select Category ----</mat-option>
+                                <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>--Subject--</mat-label>
+                            <mat-select formControlName="subjectName" name="subjectName">
+                                <mat-option value="">---- Subject Name ----</mat-option>
+                                <mat-option *ngFor="let item of subjects" [value]="item.name">{{item.name}}</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field class="full-width" appearance="outline">
+                            <mat-label>Summary</mat-label>
+                            <textarea matInput formControlName="summary"></textarea>
+                        </mat-form-field>
+                        <div fxFlex="100" class="pr-1">
+                            <input type="file" name="image" (change)="onImageChange($event)" accept="image/*">
+                        </div>
+                        <div fxFlex="100" class="mt-1">
+                            <button mat-flat-button color="primary" [disabled]="itemForm.invalid">Submit</button>
+                            <span fxFlex></span>
+                            <button mat-button color="warn" type="button" *ngIf="_id" (click)="deleteItem()">Delete</button>
+                            <span fxFlex></span>
+                            <button mat-button type="button" [routerLink]="['/admin/fmat']">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

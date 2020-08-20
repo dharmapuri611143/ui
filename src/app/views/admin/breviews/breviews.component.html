@@ -1,0 +1,54 @@
+<div fxLayout="row wrap" class="mt-8" [@animate]="{value:'*',params:{y:'25px',delay:'500ms'}}">
+    <div fxFlex="100">
+        <!-- Time line -->
+
+        <mat-card class="default">
+            <mat-card-title>
+                <form [formGroup]="filterForm" (ngSubmit)="searchSubmit()">
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">--limit--</mat-label>
+                        <mat-select formControlName="limit" name="limit" (selectionChange)="onLimitChange()">
+                            <mat-option>---- Select Limit ----</mat-option>
+                            <mat-option *ngFor="let item of limits" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">Search by Review</mat-label>
+                        <input matInput type="text" name="filterText" placeholder="Search by Review" formControlName="filterText">
+                    </mat-form-field>
+                </form>
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap" fxLayoutWrap="nowrap">
+                    <div fxFlex="100" fxFlex.lg="100" fxFlex.sm="100" fxFlex.xs="100">
+                        <ngx-datatable #myTable [scrollbarH]="true" class="material ml-0 mr-0" [rows]="(items || {}).docs" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [rowHeight]="50" [externalPaging]="true" (page)='setPage($event)' [count]="items.total" [offset]="items.offset"
+                            [limit]="items.limit" [rowHeight]="'auto'">
+                            <ngx-datatable-column name="Review By" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ (((row ||{}).reviwedBy ||{})[0] ||{}).username }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Review" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <span [matTooltip]="row?.review" matTooltipPosition="above"> {{ row?.review }}</span>
+
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Rating" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ row?.rating }}
+                                </ng-template>
+                            </ngx-datatable-column>
+
+                            <ngx-datatable-column name="Action" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <button mat-flat-button [color]="'primary'" (click)="deleteReview(row?._id)">delete</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

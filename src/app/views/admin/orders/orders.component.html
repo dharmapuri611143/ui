@@ -1,0 +1,136 @@
+<div fxLayout="row wrap" class="mt-8" [@animate]="{value:'*',params:{y:'25px',delay:'500ms'}}">
+    <div fxFlex="100">
+        <!-- Time line -->
+
+        <mat-card class="default">
+            <mat-card-title>
+                <form [formGroup]="filterForm" (ngSubmit)="searchSubmit()">
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">--limit--</mat-label>
+                        <mat-select formControlName="limit" name="limit" (selectionChange)="onLimitChange()">
+                            <mat-option>---- Select Limit ----</mat-option>
+                            <mat-option *ngFor="let item of limits" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">Search by OrderId</mat-label>
+                        <input matInput type="text" name="filterText" placeholder="Search by OrderId" formControlName="filterText">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">--Root Category--</mat-label>
+                        <mat-select formControlName="rootCategoryName" name="rootCategoryName" (selectionChange)="showCategories()">
+                            <mat-option>---- Select Root Category ----</mat-option>
+                            <mat-option *ngFor="let item of rootCategories" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label>--Category--</mat-label>
+                        <mat-select #cVal formControlName="categoryName" name="categoryName" (selectionChange)="onCategoryChange(cVal.value)">
+                            <mat-option value="">---- Select Category ----</mat-option>
+                            <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label>--Subject--</mat-label>
+                        <mat-select #subVal formControlName="subjectName" name="subjectName" (selectionChange)="getCourses({subjectName: subVal.value})">
+                            <mat-option value="">---- Subject Name ----</mat-option>
+                            <mat-option *ngFor="let item of subjects" [value]="item.name">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label>--Course--</mat-label>
+                        <mat-select #courseRef formControlName="courseName" name="courseName" (selectionChange)="onCourseChange()">
+                            <mat-option value="">---- Course Name ----</mat-option>
+                            <mat-option *ngFor="let item of courses" [value]="item._id">{{item.name}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </form>
+                <span fxFlex></span>
+                <div>
+                    <button mat-raised-button color="primary" (click)="openPopup()">Create Custom Order</button>
+                </div>
+
+            </mat-card-title>
+            <mat-card-content>
+                <div fxLayout="row wrap" fxLayoutWrap="nowrap">
+                    <div fxFlex="100" fxFlex.lg="100" fxFlex.sm="100" fxFlex.xs="100">
+                        <ngx-datatable #myTable class="material ml-0 mr-0" [rows]="(items || {}).docs" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [scrollbarH]="true" [rowHeight]="50" [externalPaging]="true" (page)='setPage($event)' [count]="items.total" [offset]="items.offset"
+                            [limit]="items.limit" [rowHeight]="'auto'">
+                            <ngx-datatable-row-detail [rowHeight]="'auto'" #myDetailRow (toggle)="onDetailToggle($event)">
+                                <ng-template style="width:100%;" let-row="row" let-expanded="expanded" ngx-datatable-row-detail-template>
+                                    <div>
+                                        <table class="inner-table-id" style="width:100%; text-align: left;">
+                                            <tr>
+                                                <th>Course Name</th>
+                                                <th>Subject Name</th>
+                                                <th>Subject Code</th>
+                                                <th>Price</th>
+                                                <th>Root Category</th>
+                                                <th>Category Name</th>
+                                            </tr>
+                                            <tr *ngFor="let po of (row ||{}).course">
+                                                <td>{{po.name}}</td>
+                                                <td>{{po.subjectName}}</td>
+                                                <td>{{po.subjectCode}}</td>
+                                                <td>{{po.price}}</td>
+                                                <td>{{po.rootCategoryName}}</td>
+                                                <td>{{po.categoryName}}</td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </ng-template>
+                            </ngx-datatable-row-detail>
+                            <ngx-datatable-column [width]="50" [resizeable]="false" [sortable]="false" [draggable]="false" [canAutoResize]="false">
+                                <ng-template let-row="row" let-expanded="expanded" ngx-datatable-cell-template>
+                                    <a href="javascript:void(0)" [class.datatable-icon-right]="!expanded" [class.datatable-icon-down]="expanded" title="Expand/Collapse Row" (click)="toggleExpandRow(row)">
+                                    </a>
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Order Id" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ row?.orderId }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Amount" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ row?.amount }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Purchased By" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ (((row ||{}).purchasedBy ||{})[0] ||{}).username }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Email" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ (((row ||{}).purchasedBy ||{})[0] ||{}).email }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Payment Status" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ (((row ||{}).payment ||{})[0] ||{}).status }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Payment Mode" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ (((row ||{}).payment ||{})[0] ||{}).mode }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Order Date" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    {{ (row ||{}).created | date }}
+                                </ng-template>
+                            </ngx-datatable-column>
+                            <ngx-datatable-column name="Action" [flexGrow]="1">
+                                <ng-template let-row="row" ngx-datatable-cell-template>
+                                    <button mat-flat-button [color]="'primary'" *ngIf="((row ||{}).payment ||{}).status === 'success' && ((row ||{}).payment ||{}).mode !== 'Manual'" (click)="refundPay({_id: row?._id, paymentId: ((row ||{}).payment ||{}).payuMoneyId, amount: row?.amount})">Refund</button>
+                                </ng-template>
+                            </ngx-datatable-column>
+                        </ngx-datatable>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

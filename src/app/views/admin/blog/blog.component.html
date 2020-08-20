@@ -1,0 +1,64 @@
+<mat-card class="mt-16" [@animate]="{value:'*',params:{y:'50px',delay:'300ms'}}">
+    <mat-card-title>
+        Add/Update Current Affairs
+    </mat-card-title>
+    <mat-card-content>
+        <div fxLayout="row wrap">
+            <div fxLayout="row" fxFlex="100">
+                <mat-card style="width: 100%;">
+                    <mat-card-content>
+                        <quill-editor theme="snow" [(ngModel)]="editorData" (onContentChanged)="onContentChanged($event)" onSelectionChanged="onSelectionChanged($event)"></quill-editor>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div fxLayout="row" fxFlex="100">
+                <form [formGroup]="itemForm" (ngSubmit)="submit()">
+                    <div fxLayout="row wrap" fxLayout.lt-sm="column">
+                        <div fxFlex="50" class="pr-1">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Title</mat-label>
+                                <input matInput name="title" [formControl]="itemForm.controls['title']" placeholder="Title">
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="50" class="pr-1">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Root Category--</mat-label>
+                                <mat-select #rootCVal formControlName="rootCategory" name="rootCategory" (selectionChange)="getCategories(rootCVal.value)">
+                                    <mat-option value="">---- Select Root Category ----</mat-option>
+                                    <mat-option *ngFor="let item of rootCategories" [value]="item._id">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="50" class="pr-1">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Category Name</mat-label>
+                                <mat-select formControlName="category" name="category">
+                                    <mat-option value="">---- Select Category ----</mat-option>
+                                    <mat-option *ngFor="let item of categories" [value]="item.name">{{item.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+
+                        <div fxFlex="50" class="pr-1">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Summary</mat-label>
+                                <textarea matInput formControlName="summary"></textarea>
+                            </mat-form-field>
+                        </div>
+                        <div fxFlex="100" class="pr-1">
+                            <input type="file" name="image" (change)="onImageChange($event)" accept="image/*">
+                        </div>
+                        <div fxFlex="100" class="pr-1">
+                            <div><input matInput placeholder="Video Link"></div>
+                        </div>
+                        <div fxFlex="100" class="mt-1">
+                            <button mat-flat-button color="primary" [disabled]="itemForm.invalid">Submit</button>
+                            <span fxFlex></span>
+                            <button mat-button color="warn" type="button" [routerLink]="['/admin/bloglist']">Cancel</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

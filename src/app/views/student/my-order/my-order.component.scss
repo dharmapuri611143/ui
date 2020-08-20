@@ -1,0 +1,63 @@
+.rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    width: 145px;
+    padding-bottom: 20px;
+}
+
+.rating input {
+    position: absolute;
+    left: -999999px;
+}
+
+.rating label {
+    display: inline-block;
+    font-size: 0;
+}
+
+.rating>label:before {
+    position: relative;
+    font: 24px/1 FontAwesome;
+    display: block;
+    content: "\f005";
+    color: #ccc;
+    background: -webkit-linear-gradient(-45deg, #d9d9d9 0%, #b3b3b3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.rating>label:hover:before,
+.rating>label:hover~label:before,
+.rating>label.selected:before,
+.rating>label.selected~label:before {
+    color: #4680ff;
+    background: -webkit-linear-gradient(-45deg, #4680ff 0%, #4680ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.reviewed-rate i {
+    color: #edeff3;
+}
+
+.reviewed-rate>i.selected:before {
+    color: #4680ff;
+    /* background: -webkit-linear-gradient(-45deg, #4680ff 0%, #4680ff 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent; */
+}
+
+.html-img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 150px;
+    padding: 20px;
+}
+
+.html-icon {
+    position: absolute;
+    margin-top: 41px;
+    margin-left: 60px;
+    font-size: 62px;
+    cursor: pointer;
+}

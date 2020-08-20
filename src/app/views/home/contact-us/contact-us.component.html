@@ -1,0 +1,121 @@
+<section style="margin-bottom: 35px;" id="about" class="mat-typography" [ngStyle.lt-md]="{'margin-top': '50px', 'margin-bottom': '50px'}" [@animate]="{value:'*',params:{y:'25px',delay:'300ms'}}">
+    <div class="container">
+        <div class="about-section about-heading" fxLayout="column" fxLayoutAlign="center center">
+            <div>
+                <h2>Contact Us</h2>
+            </div>
+        </div>
+
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutWrap="nowrap">
+            <div fxFlex="50">
+                <img class="full-width" style="height: 407px;vertical-align: middle;" src="assets/images/contact_bg.jpg">
+                <div class="pt-16">
+                    <h2>Contact Info</h2>
+                </div>
+                <p>In order to answer your question or troubleshoot a problem, a amidaedutech.com representative may need to access your account, including, as needed, your messages and settings.
+                </p>
+                <strong>Hyderabad Office</strong> 1-98/11/62 Arunodaya colony madhapur besides Dena Bank Hyderabad-500081
+                <div class="pt-8">
+                    <h4>+917288006007, <strong>info@amidaedutech.com</strong></h4>
+                </div>
+            </div>
+
+            <div fxFlex="50">
+                <mat-card class="default">
+                    <mat-card-content>
+                        <form [formGroup]="getQuoteForm" fxLayout="column" fxLayoutAlign="start" (ngSubmit)="onSubmit()">
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Name</mat-label>
+                                <input matInput formControlName="name" type="text" name="name" placeholder="Name" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Email</mat-label>
+                                <input matInput formControlName="email" type="email" name="email" placeholder="Email" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Mobile Number</mat-label>
+                                <input matInput formControlName="phone" type="number" name="phone" placeholder="Mobile Number" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>Location</mat-label>
+                                <input matInput formControlName="location" type="text" name="location" placeholder="Location" />
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Category--</mat-label>
+                                <mat-select #mySelect formControlName="category" (selectionChange)="getCourseByCat(mySelect.value)">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let cat of categories" [value]="cat.name">{{cat.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width" appearance="outline">
+                                <mat-label>--Course--</mat-label>
+                                <mat-select formControlName="course">
+                                    <mat-option>None</mat-option>
+                                    <mat-option *ngFor="let course of courses" [value]="course.name">{{course.name}}</mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field class="full-width">
+                                <textarea matInput placeholder="Your Query" name="message" formControlName="message"></textarea>
+                            </mat-form-field>
+                            <button [disabled]="!getQuoteForm.valid" class="mb-8" mat-raised-button color="primary">Submit</button>
+                        </form>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</section>
+<section id="about" class="mat-typography" [ngStyle.lt-md]="{'margin-top': '50px', 'margin-bottom': '50px'}">
+    <div class="map-container">
+        <mat-card>
+            <mat-card-content>
+                <aol-map [width]="width" [height]="height" [logo]="true" #map>
+                    <aol-interaction-default></aol-interaction-default>
+                    <aol-control-defaults></aol-control-defaults>
+                    <aol-control-fullscreen></aol-control-fullscreen>
+                    <aol-view [zoom]="zoom">
+                        <aol-coordinate [x]="longitude" [y]="latitude" [srid]="'EPSG:4326'"></aol-coordinate>
+                    </aol-view>
+                    <aol-layer-tile [opacity]="opacity">
+                        <aol-source-osm></aol-source-osm>
+                    </aol-layer-tile>
+                    <aol-layer-vector [opacity]="opacity">
+                        <aol-source-vector>
+                            <aol-feature>
+                                <aol-geometry-point>
+                                    <aol-coordinate [x]="longitudePointer" [y]="latitudePointer" [srid]="'EPSG:4326'"></aol-coordinate>
+                                </aol-geometry-point>
+                                <aol-style>
+                                    <aol-style-circle [radius]="10">
+                                        <aol-style-stroke [color]="'black'" [width]="width"></aol-style-stroke>
+                                        <aol-style-fill [color]="'green'"></aol-style-fill>
+                                    </aol-style-circle>
+                                </aol-style>
+                            </aol-feature>
+                            <aol-feature>
+                                <aol-geometry-point>
+                                    <aol-coordinate [x]="longitudePointer" [y]="latitudePointer" [srid]="'EPSG:4326'"></aol-coordinate>
+                                </aol-geometry-point>
+                                <aol-style>
+                                    <aol-style-icon src="assets/images/icon/placeholder.png" [anchor]="[0.5, 1]" [anchorXUnits]="'fraction'" [anchorYUnits]="'fraction'" [scale]="0.1" [anchorOrigin]="'top-left'">
+                                    </aol-style-icon>
+                                </aol-style>
+                            </aol-feature>
+                        </aol-source-vector>
+                    </aol-layer-vector>
+                    <aol-control>
+                        <aol-content>
+                            <div class="ol-overlaycontainer-stopevent">
+                                <div class="ol-zoom ol-unselectable ol-control">
+                                    <button [title]="titleZoomIn" class="ol-zoom-in" type="button" title="Zoom in" (click)="increaseZoom()">+</button>
+                                    <button [title]="titleZoomOut" class="ol-zoom-out" type="button" title="Zoom out" (click)="decreaseZoom()">−</button>
+                                </div>
+                            </div>
+                        </aol-content>
+                    </aol-control>
+                </aol-map>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</section>

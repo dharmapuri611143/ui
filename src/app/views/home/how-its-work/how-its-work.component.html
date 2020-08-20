@@ -1,0 +1,51 @@
+<section style="margin-bottom: 24px;" [@animate]="{value:'*',params:{y:'25px',delay:'300ms'}}" [ngStyle.lt-md]="{'margin-top': '30px', 'margin-bottom': '30px'}">
+    <div fxLayout="column" fxFlex="100">
+        <mat-card>
+            <div class="portfolio-section portfolio-heading mat-typography" fxLayout="column" fxLayoutAlign="center center">
+                <div>
+                    <h2>LATEST COURSES</h2>
+                </div>
+            </div>
+
+            <div fxLayout="row wrap" [@animate]="{value:'*',params:{delay:'600ms',scale:'.9'}}">
+                <div fxFlex="100">
+
+                    <mat-tab-group (selectedTabChange)="getCourseByCat($event)">
+                        <mat-tab *ngFor="let cat of category" [label]="cat.name">
+
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+
+            <mat-card-content>
+                <div fxLayout="row wrap">
+                    <div class="owl-course owl-loaded owl-refresh owl-carousel owl-theme" *ngIf="(courses ||{}).length> 0">
+                        <div *ngFor="let course of courses;" id="scroll-item" class="item">
+                            <mat-card>
+
+                                <a [routerLink]="['/course/products', course._id]"><img style="height: 133px !important;" [src]="course.image" alt="round-img">
+                                </a>
+                                <mat-card-content>
+
+                                    <a [routerLink]="['/course/products', course._id]"><span>{{course.headline}}</span></a>
+
+                                </mat-card-content>
+                                <mat-card-actions>
+                                    <button mat-button>{{course.aggregateRating}}/{{course.totalRating ? '('+course.totalRating+')': ''}}</button>
+                                    <button mat-button>Price: {{course.price}} </button>
+                                </mat-card-actions>
+                            </mat-card>
+                        </div>
+                    </div>
+                    <div class="next-prev-btn">
+                        <button class="customPrevBtnhw" mat-mini-fab color="accent">Prev</button>
+                        <button class="customNextBtnhw" mat-mini-fab color="primary">Next</button>
+                    </div>
+                </div>
+
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+</section>

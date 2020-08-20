@@ -1,0 +1,54 @@
+<mat-card class="pt-8">
+    <mat-card-title>MY ORDERS</mat-card-title>
+    <mat-card-content>
+        <div class="shop-wrap" fxLayout="row" fxLayoutWrap="wrap">
+            <div class="full-width">
+                <mat-card *ngFor="let order of orderList">
+                    <mat-card-title>
+                        <span>
+                                        {{order.orderId}}
+                                </span>
+                        <span fxFlex></span> Payment Status: <span *ngIf="((order ||{}).payment ||{}).status" [ngClass]="{
+                                        'text-success': order.payment.status==='success',
+                                        'text-danger': order.payment.status==='failure'
+                                      }">{{((order ||{}).payment ||{}).status}}</span>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div class="product-container" [ngClass]="viewMode">
+                            <div class="product-wrap" *ngFor="let product of order.course; let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                                <div class="product-inner default-bg">
+                                    <div class="featured-img" [routerLink]="['/student/viewcourse']" [queryParams]="{ id : (product ||{})._id, orderId: order.orderId}">
+                                        <img style="height: 170px;" [src]="product.image" alt="">
+                                    </div>
+                                    <div class="info-wrap p-1">
+                                        <div class="main-info">
+                                            <h3 class="title" [routerLink]="['/student/viewcourse']" [queryParams]="{ id : (product ||{})._id, orderId: order.orderId}">{{ ((product ||{}).name ||{}).length>=21 ? product.name.substring(0, 21) + '...' : product.name}}</h3>
+                                            <p class="text-muted p-line"><strong>Subject:</strong> {{product?.subjectName}} <small class="text-muted"> ({{product.subjectCode}})</small></p>
+                                            <p class="text-muted p-line"><strong>Category:</strong> {{product?.categoryName}}</p>
+                                            <p class="text-muted p-line"><strong>Tags:</strong> <span> {{product?.headline}} </span> </p>
+                                        </div>
+                                        <div class="actions">
+                                            <div class="price-rating">
+                                                <div class="price">
+                                                    Price: {{'₹'+order.amount}}
+                                                </div>
+                                            </div>
+
+                                            <div class="add-to-cart">
+                                                <span fxFlex></span>
+                                                <button mat-mini-fab color="primary" [routerLink]="['/student/viewcourse']" [queryParams]="{ id : (product ||{})._id, orderId: order.orderId}">
+                                                    <mat-icon>arrow_forward</mat-icon>
+                                                  </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+
+        </div>
+    </mat-card-content>
+</mat-card>

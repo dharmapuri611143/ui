@@ -1,0 +1,12 @@
+version: "3.3"
+services:
+  frontEnd:
+    container_name: backend
+    image: backend:latest
+    ports:
+      - "8888:8888"
+  web:
+    container_name: frontEnd
+    image: ui:latest
+    ports:
+      - "4200:4200" 

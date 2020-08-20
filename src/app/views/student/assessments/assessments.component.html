@@ -1,0 +1,55 @@
+<mat-card class="pt-8">
+    <mat-card-title>My Assessments</mat-card-title>
+    <mat-card-content>
+        <div class="shop-wrap mb-16" fxLayout="row" fxLayoutWrap="wrap">
+            <!-- Filters -->
+            <!-- Right side -->
+            <div class="full-width">
+                <!-- Search Form -->
+                <div class="product-container" *ngIf="assessList.length === 0">
+                    Your list is empty, take an assessment
+                </div>
+                <!-- Products container -->
+                <div *ngIf="assessList.length > 0" class="product-container" [ngClass]="viewMode">
+                    <!-- Product Box -->
+                    <div id="pro-wrap" class="product-wrap" *ngFor="let assessment of assessList;  let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                        <div class="product-inner default-bg">
+                            <div class="info-wrap p-1">
+                                <div class="main-info">
+                                    <h3 class="title">{{assessment.name}} ({{assessment.status}})</h3>
+
+                                    <div>
+                                        <div class="sub-head-di">
+                                            <mat-icon color="warn">date_range</mat-icon> <span class="cal-text">{{assessment.category}}</span></div>
+                                        <div class="sub-head-div">
+                                            Questions: <strong>{{((assessment ||{}).answers ||{}).length}}</strong>
+                                        </div>
+                                        <!-- <mat-divider></mat-divider> -->
+                                        <div fxLayout="row wrap">
+                                            Score : <strong>{{assessment.score ? assessment.score : 'Pending'}}</strong>
+                                        </div>
+                                    </div>
+                                    <div class="actions">
+                                        <div class="price-rating">
+                                            <div>
+                                                Score <span class="badge" [ngClass]="{'badge-danger': assessment.grade === 'D', 'badge-warning': assessment.grade === 'C', 'badge-info': assessment.grade === 'B', 'badge-primary': assessment.grade === 'A'}">{{assessment.grade}}</span>
+                                            </div>
+                                            <div class="blog-but">
+                                                <button *ngIf="assessment.status==='Completed'" [routerLink]="['/student/assess']" [queryParams]="{ id : assessment._id}" mat-flat-button color="primary">Next<mat-icon>arrow_right_alt</mat-icon></button>
+                                                <button *ngIf="assessment.status!=='Completed'" [routerLink]="['/student/assess']" [queryParams]="{ id : assessment._id}" mat-flat-button color="primary">Start<mat-icon>arrow_right_alt</mat-icon></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Product -->
+
+                    </div>
+                    <!-- End Products container -->
+                </div>
+
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

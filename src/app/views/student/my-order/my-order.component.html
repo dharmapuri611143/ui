@@ -1,0 +1,198 @@
+<div [@animate]="{value:'*',params:{y:'50px',delay:'300ms'}}">
+    <mat-sidenav-container>
+        <mat-sidenav EgretSideNavToggle class="shop-sidebar default-light-bg">
+            <div class="shop-filters-wrap">
+                <mat-accordion multi="false" displayMode="flat" *ngFor="let vobj of videoContent">
+                    <mat-expansion-panel expanded="false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                {{vobj.title}}
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <ul class="product-categories">
+                            <li *ngFor="let vd of vobj.videoUrl" [ngClass]="{'fw-500': vd.title === activeCategory}">
+                                <a (click)="openLessonV(vd, vobj.title)">
+                                    <mat-icon style="font-size: 18px; color: green;">lock_open</mat-icon><span>{{vd.title}}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </div>
+        </mat-sidenav>
+        <div fxLayout="row" fxLayoutWrap="wrap">
+            <div class="full-width">
+                <div fxLayout="row" fxLayout.lt-sm="column" class="shop-top-toolbar">
+                    <button mat-icon-button class="mr-1" (click)="toggleSideNav()"><mat-icon>short_text</mat-icon> </button>
+                </div>
+                <mat-card>
+                    <mat-card-title>
+                        <span>
+                                {{(courseDetails || {}).headline}} > {{vTitle + ' > ' + (selectedVideo ||{}).title}}
+                        </span>
+                    </mat-card-title>
+                    <mat-card-content>
+                        <div *ngIf="selectedVideo">
+                            <video fxFlex.xs="80" fxFlex.sm="80" fxFlex.md="70" fxFlex.lg="70" fxFlex.xl="70" oncontextmenu="return false;" [src]="selectedVideo.path" type="video/mp4" id="sub-video" controls controlsList="nodownload" onended="run()">
+                                                </video>
+
+
+                        </div>
+                        <div *ngIf="courseDetails?.image" style="padding: 10px;">
+                            <div fxLayout="row">
+                                <h3 style="color: #f29838;"><b>To Watch Interactive Videos, Please Click on play button. If asked password use "amida".</b></h3>
+                            </div>
+                            <mat-icon class="html-icon" (click)="openHtmlCont()">play_circle_outline</mat-icon>
+                            <img class="html-img" [src]="courseDetails.image">
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+
+            </div>
+
+        </div>
+    </mat-sidenav-container>
+</div>
+<div fxLayout="row wrap">
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="default">
+            <mat-card-title>
+                <p class="blink blink-two">Download Documents</p>
+            </mat-card-title>
+            <mat-card-content class="p-2">
+                <mat-list class="compact-list mb-1" *ngIf="((courseDetails ||{}).docs ||{}).length>0">
+                    <mat-list-item class="" *ngFor="let doc of (courseDetails ||{}).docs; let i=index;">
+                        <div class="full-width" fxLayout="row" fxFlex="100">
+                            {{i+1}}. {{spdoc(doc)}}
+                            <span fxFlex></span>
+                            <button (click)="dDocs(doc)">Download</button>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <div *ngIf="!((courseDetails ||{}).docs ||{}).length">
+                    Documents not available for this course.
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <!-- Time line -->
+        <mat-card class="default">
+            <mat-card-title>Review & Rating</mat-card-title>
+            <mat-card-content>
+
+                <form [formGroup]="reviewForm" class="signup-form" fxLayout="column" fxLayoutAlign="start" (ngSubmit)="createReview()">
+                    <div class="rating">
+                        <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+ratingId" (click)="onClick(ratingId)" [matTooltip]="ratingId" matTooltipPosition="above">
+                                    <mat-icon>
+                                      {{showIcon(ratingId)}}
+                                    </mat-icon>
+                                  </button>
+                    </div>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Write Your Review</mat-label>
+                        <textarea matInput placeholder="Write Your Review" name="review" formControlName="review"></textarea>
+                    </mat-form-field>
+                    <button class="mb-8" mat-raised-button color="primary" [disabled]="reviewForm.invalid">Submit</button>
+                </form>
+            </mat-card-content>
+            <mat-card-content>
+
+                <div class="timeline">
+                    <div class="timeline-item" *ngFor="let review of reviews">
+                        <div class="timeline-badge">
+                            <img src="assets/images/profile-blank.png" alt="">
+                        </div>
+                        <div class="timeline-body">
+                            <div class="timeline-body-top" fxLayout="row">
+                                <a href="#" class="timeline-body-title mr-1"><b>{{((review ||{}).reviwedBy ||{}).username}}</b></a>
+                                <span class="text-muted">{{review?.created | date}}</span>
+                                <span fxFlex></span>
+                            </div>
+                            <div class="timeline-body-content">
+                                <p>{{review.review}}</p>
+                            </div>
+                            <div class="timeline-body-actions">
+                                <div class="stars-example-css reviewed-rate">
+                                    <mat-icon [color]="color">{{1
+                                        <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                            <mat-icon [color]="color">{{2
+                                                <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                                    <mat-icon [color]="color">{{3
+                                                        <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                                            <mat-icon [color]="color">{{4
+                                                                <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                                                    <mat-icon [color]="color">{{5
+                                                                        <=review.rating ? 'star' : 'star_border'}}</mat-icon>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <!-- End Time line -->
+
+
+    </div>
+
+    <div fxLayout="column" fxFlex="100" fxFlex.gt-md="50">
+        <mat-card class="default">
+            <mat-card-title>Related Courses</mat-card-title>
+            <mat-card-content class="p-0">
+                <mat-list class="compact-list mb-1">
+                    <mat-list-item class="" *ngFor="let product of relatedCourses">
+                        <a [routerLink]="['/course/products/', product._id]"><img mat-list-avatar [src]="(product ||{}).image" class="mr-1" alt="tbl"></a>
+                        <div fxLayout="row" fxFlex="100">
+                            <h6 class="m-0 mr-1"><a [routerLink]="['/course/products/', product._id]">{{product.headline}}</a></h6>
+                            <span fxFlex></span>
+                            <small class="text-muted mr-1 ml-1">{{product.subjectName}}</small>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+                <div class="text-center">
+                    <button mat-button class="full-width" [routerLink]="['/course']">View all</button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <mat-card class="default">
+            <mat-card-title>FAQ LIST</mat-card-title>
+            <mat-card-content class="p-2">
+                <mat-list class="compact-list mb-1">
+                    <mat-list-item class="" *ngFor="let faq of faqList">
+                        <img mat-list-avatar src="assets/images/profile-blank.png" class="mr-1" alt="tbl">
+                        <div class="full-width" fxLayout="row" fxFlex="100">
+                            {{faq.heading}}
+                            <span fxFlex></span>
+                            <small class="text-muted mr-1 ml-1">{{faq.created | date}} <b> &nbsp; By: {{((faq ||{}).faqBy ||{}).username}}</b></small>
+
+                        </div>
+                        <div class="full-width" style="display: block;
+                        position: absolute;
+                        margin-top: 15px;
+                        margin-left: 40px;">
+                            <small class="text-muted mr-1 ml-1">{{faq.content}}</small>
+                        </div>
+                    </mat-list-item>
+                </mat-list>
+            </mat-card-content>
+            <mat-card-content class="p-2">
+                <h5 class="card-header-text">Create FAQ</h5>
+                <form [formGroup]="faqForm" class="signup-form" fxLayout="column" fxLayoutAlign="start" (ngSubmit)="createFaq()">
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Write FAQ Heading</mat-label>
+                        <input formControlName="heading" matInput type="text" name="heading" placeholder="Write FAQ Heading" />
+                    </mat-form-field>
+                    <mat-form-field class="full-width" appearance="outline">
+                        <mat-label>Write Comment</mat-label>
+                        <textarea matInput placeholder="Write Comment" name="content" formControlName="content"></textarea>
+                    </mat-form-field>
+                    <button class="mb-8" mat-raised-button color="primary" [disabled]="faqForm.invalid">Submit</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+    </div>
+
+
+</div>

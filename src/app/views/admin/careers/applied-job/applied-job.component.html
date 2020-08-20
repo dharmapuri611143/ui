@@ -1,0 +1,67 @@
+<mat-card class="mt-8" [@animate]="{value:'*',params:{y:'50px',delay:'300ms'}}">
+    <mat-card-title>
+        <div fxLayout="row">
+            <form (ngSubmit)="filter()">
+                <mat-form-field class="full-width" appearance="outline">
+                    <mat-label>--Status--</mat-label>
+                    <mat-select #rootCVal name="status" (selectionChange)="onStatusChange(rootCVal.value)">
+                        <mat-option value="">---- Select Status ----</mat-option>
+                        <mat-option *ngFor="let item of ['New', 'Accepted', 'Rejected']" [value]="item">{{item}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </form>
+        </div>
+    </mat-card-title>
+    <h4>Applied Job List</h4>
+    <mat-card-content class="p-0">
+        <ngx-datatable class="material ml-0 mr-0" [scrollbarH]="true" [rows]="(items || {}).docs" [columnMode]="'force'" [headerHeight]="50" [footerHeight]="50" [count]="(items || {}).total" [rowHeight]="50" [externalPaging]="true" [offset]="(items || {}).offset"
+            [limit]="(items || {}).limit" (page)='setPage($event)'>
+
+            <ngx-datatable-column name="Name" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.firstName + ' ' + (row?.lastName || '')}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Email" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.email}}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Phone" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.phone }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Position" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.jobfor?.title }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Created Date" [flexGrow]="1">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    {{ row?.created | date }}
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Action" [flexGrow]="1" [width]="'200'">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <button *ngIf="row.status ==='New'" mat-flat-button style="margin-right: 10px;" [color]="'primary'" (click)="statusChange(row._id, 'Accepted')">Accept</button>
+                    <button *ngIf="row.status ==='New'" mat-flat-button style="margin-right: 10px;" [color]="'warn'" (click)="statusChange(row._id, 'Rejected')">Reject</button>
+                    <span *ngIf="row.status !=='New'">{{row?.status}}</span>
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Mail" [flexGrow]="1" [width]="'200'">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <button mat-flat-button [color]="'primary'" (click)="mailTo(row)">
+                    Send Mail
+                 </button>
+
+                </ng-template>
+            </ngx-datatable-column>
+            <ngx-datatable-column name="Resume" [flexGrow]="1" [width]="'200'">
+                <ng-template let-row="row" ngx-datatable-cell-template>
+                    <button mat-flat-button color="accent" (click)="dDocs(row?.resume)">Resume Download</button>
+                </ng-template>
+            </ngx-datatable-column>
+        </ngx-datatable>
+    </mat-card-content>
+</mat-card>

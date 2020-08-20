@@ -1,0 +1,39 @@
+/* --------- heading --------- */
+
+.heading-section {
+    text-align: center;
+}
+
+.h-text-c {
+    color: #03a9f4;
+}
+
+.h-heading h1 {
+    font-size: 30px;
+}
+
+.highlight {
+    font-weight: bold;
+    color: black;
+}
+
+.ng-autocomplete {
+    width: 100%;
+    max-width: 600px;
+    display: table;
+    margin: 0 auto;
+}
+
+.auto-com-c {
+    z-index: 1000001 !important;
+    .suggestions-container is-visible {
+        z-index: 1000001 !important;
+    }
+}
+
+.auto-c-div {}
+
+:host ::ng-deep .mat-form-field-appearance-outline .mat-form-field-flex {
+    padding-bottom: 0.60em !important;
+    padding-top: 0.60em !important;
+}

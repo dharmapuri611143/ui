@@ -1,0 +1,44 @@
+<section class="mat-typography footer-box" [ngStyle.lt-md]="{'margin-top': '50px', 'margin-bottom': '50px'}">
+    <div class="container">
+        <div fxLayout="row" fxLayout.lt-md="column" fxLayoutWrap="nowrap" fxLayoutGap="30px">
+            <div fxFlex="20">
+                <div fxLayout="column" fxLayoutAlign="center center" [ngStyle.xs]="{'padding': '0 60px'}">
+                    <h1 class="about-text mb-16">Social Media</h1>
+                    <div>
+                        <button mat-icon-button class="mx-16" aria-label="Example icon-button with a heart icon">
+                                    <img width='40px' src="assets/images/icon/facebook.png" alt="" />
+                                  </button>
+                        <button mat-icon-button class="mx-16" aria-label="Example icon-button with a heart icon">
+                                      <img width='40px' src="assets/images/icon/twitter.png" alt="" /> 
+                                  </button>
+                        <button mat-icon-button class="mx-16" aria-label="Example icon-button with a heart icon">
+                                        <img width='40px' src="assets/images/icon/google-plus.png" alt="" />  
+                                    </button>
+                    </div>
+
+                </div>
+            </div>
+            <div fxFlex="15">
+                <div fxLayout="column" fxLayoutAlign="center center" [ngStyle.xs]="{'padding': '0 60px'}">
+                    <a class="pb-1" [routerLink]="['/home/privacy']">Privacy Policy</a>
+                    <a class="pb-1" [routerLink]="['/home/tofs']">Terms Of Service</a>
+                    <a [routerLink]="['/home/dsclm']">Disclaimer</a>
+                </div>
+            </div>
+            <div fxFlex="50">
+                <div fxLayout="column" [ngStyle.lt-md]="{'padding': '0 60px'}">
+                    <h1 class="about-text mb-16">Contact Us</h1>
+                    <p>
+                        Email: info@amidaedutech.com <br/> Phone: +(91) 728 800 6007<br/> Address: 1-98/11/62 Arunodaya colony madhapur besides Dena Bank Hyderabad-500081
+                    </p>
+                </div>
+            </div>
+        </div>
+        <hr/>
+        <div fxLayout="row">
+
+            Copyright &copy; {{fulldate}} All rights reserved by <a href="#">Amida Educational Services Pvt. Ltd.</a>
+            <span id="siteseal"><script async type="text/javascript" src="https://seal.godaddy.com/getSeal?sealID=5uUhxT1l13olqnPKpeuHTE8BSLPF2QoiKOAhcfk44MqiLEKyWbvVmvBJRyiK"></script></span>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,60 @@
+<mat-toolbar class="topbar">
+    <!-- Sidenav toggle button -->
+    <button *ngIf="layoutConf.sidebarStyle !== 'compact'" mat-icon-button id="sidenavToggle" (click)="toggleSidenav()" matTooltip="Toggle Hide/Open">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+    <a [routerLink]="['/home']"><span class="app-logo-textv mx-16" style="font-size: 24px; color: #f29838;">Amida</span></a>
+    <a class="app-logo" [routerLink]="['/home']"><img style="height: 59px;" src="assets/images/logo.jpg"></a>
+
+    <span fxFlex></span>
+    <div *ngIf="!layoutConf.isMobile" fxLayout="row wrap" fxLayoutAlign="end end" fxLayoutGap="1px">
+        <span *ngIf="(user ||{}).email" style="font-size: 14px; font-weight: 400; color: #226fce;">{{userService.user().email}}</span>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/course/freemat']" routerLinkActive="active-link"><b>Free Material</b></button>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/course']" routerLinkActive="active-link"><b>Courses</b></button>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/course/gallery']" routerLinkActive="active-link"><b>Course Gallery</b></button>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/home/careerlist']" routerLinkActive="active-link"><b>Careers</b></button>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/home/contactus']" routerLinkActive="active-link"><b>Contact Us</b></button>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/home/aboutus']" routerLinkActive="active-link"><b>About Us</b></button>
+        <button mat-button color="primary" *ngIf="(user ||{}).role==='student'" [routerLink]="['/home/blogl']" routerLinkActive="active-link"><b>Current Affairs</b></button>
+        <button routerLinkActive="active-link" *ngIf="!(user ||{})._id" mat-button color="primary" [routerLink]="['/sessions/signin']"><b>Login/Singup</b></button>
+    </div>
+    <!-- Notification toggle button -->
+    <button *ngIf="(user ||{})._id" mat-icon-button matTooltip="Notifications" (click)="toggleNotific()" [style.overflow]="'visible'" class="topbar-button-right">
+    <mat-icon>notifications</mat-icon>
+    <span *ngIf="(noti ||{}).count" class="notification-number mat-bg-warn">{{(noti ||{}).count}}</span>
+  </button>
+    <!-- Top left user menu -->
+    <button *ngIf="(user ||{})._id" mat-icon-button [matMenuTriggerFor]="accountMenu" class="topbar-button-right img-button">
+      <img *ngIf="(user ||{}).image" [src]="(user ||{}).image" >  
+      <img *ngIf="!(user ||{}).image" src='assets/images/profile-blank.png' alt="">
+  </button>
+
+    <mat-menu #accountMenu="matMenu">
+
+        <button *ngIf="(user ||{}).role==='student' && (user ||{})._id" mat-menu-item [routerLink]="['/student']">
+          <mat-icon>dashboard</mat-icon>
+          <span>Dashboard</span>
+        </button>
+        <button *ngIf="(user ||{}).role==='student' && (user ||{})._id" mat-menu-item [routerLink]="['/course/cart']">
+        <mat-icon>shopping_cart</mat-icon>
+        <span>My Cart</span>
+      </button>
+        <button mat-menu-item [routerLink]="['/profile/settings']">
+        <mat-icon>settings</mat-icon>
+        <span>Account Settings</span>
+      </button>
+        <button *ngIf="(user ||{}).role==='student' && (user ||{})._id" mat-menu-item [routerLink]="['/student/myorder']">
+      <mat-icon>reorder</mat-icon>
+      <span>My Orders</span>
+    </button>
+        <button *ngIf="(user ||{}).role==='student' && (user ||{})._id" mat-menu-item [routerLink]="['/student/assesss']">
+      <mat-icon>question_answer</mat-icon>
+      <span>Assessment</span>
+    </button>
+        <button (click)="userService.logout()" mat-menu-item>
+      <mat-icon>exit_to_app</mat-icon>
+      <span>Sign out</span>
+    </button>
+    </mat-menu>
+</mat-toolbar>

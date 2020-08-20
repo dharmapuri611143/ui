@@ -1,0 +1,68 @@
+<mat-card class="pt-8">
+    <mat-card-title>
+        <div>
+            <div class="top-toolbar" *ngFor="let rc of rootCategories">
+                <button mat-raised-button [matMenuTriggerFor]="belowMenu" (click)="filterBlog(rc.rootCat, 'rootcat')">{{rc.rootCat}} <mat-icon style="font-size: 20px;
+                    color: #b7b4b4;">keyboard_arrow_down</mat-icon></button>
+                <mat-menu #belowMenu="matMenu" yPosition="below">
+                    <button mat-menu-item *ngFor="let src of rc.cat" (click)="filterBlog(src.name, 'subcat')">{{src.name}}</button>
+                </mat-menu>
+            </div>
+            <div class="top-toolbar">
+                <button mat-raised-button color="accent" (click)="initItem()">Refresh</button>
+            </div>
+        </div>
+    </mat-card-title>
+    <mat-card-content>
+
+        <div class="shop-wrap mb-16" fxLayout="row" fxLayoutWrap="wrap">
+            <!-- Filters -->
+            <!-- Right side -->
+            <div class="full-width">
+                <!-- Search Form -->
+
+                <!-- Products container -->
+                <div class="product-container" [ngClass]="viewMode">
+                    <!-- Product Box -->
+                    <div class="product-wrap" *ngFor="let blog of items let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                        <div class="product-inner default-bg">
+                            <div class="featured-img" [routerLink]="['/home/blogd/']" [queryParams]="{_id: blog._id }">
+                                <img style="height: 190px;" [src]="blog?.image" alt="">
+                            </div>
+
+                            <div class="info-wrap p-1">
+                                <div class="main-info">
+                                    <h3 class="title" [routerLink]="['/home/blogd/']" [queryParams]="{_id: blog._id }">{{blog.title}}</h3>
+
+                                    <div>
+                                        <div class="sub-head-di">
+                                            <mat-icon color="warn">date_range</mat-icon> <span class="cal-text"> {{blog.created | date}}</span></div>
+                                        <div class="sub-head-div">
+                                            <mat-icon color="warn">account_box</mat-icon> <span class="cal-text"> By Admin</span></div>
+                                    </div>
+                                    <!-- <mat-divider></mat-divider> -->
+                                    <div fxLayout="row wrap"><b>{{blog.rootCategory}}</b></div>
+                                    <div fxLayout="row wrap">{{blog.category}}</div>
+                                    <div fxLayout="row wrap">
+                                        {{((blog ||{}).summary ||{}).length ? blog.summary.substring(0,120) + '...' : ''}}
+                                    </div>
+                                </div>
+                                <div class="actions">
+                                    <div class="price-rating">
+                                        <div class="blog-but">
+                                            <button [routerLink]="['/home/blogd/']" [queryParams]="{_id: blog._id }" mat-flat-button color="primary">Read More <mat-icon>arrow_right_alt</mat-icon></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- End Product -->
+
+                </div>
+                <!-- End Products container -->
+            </div>
+
+        </div>
+    </mat-card-content>
+</mat-card>

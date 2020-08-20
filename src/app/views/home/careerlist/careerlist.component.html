@@ -1,0 +1,89 @@
+<mat-card class="pt-8">
+    <mat-card-title>Careers
+    </mat-card-title>
+    <mat-card-content>
+        <mat-card>
+            <mat-card-content>
+                <form [formGroup]="filterForm" (ngSubmit)="filter()">
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">--Category--</mat-label>
+                        <mat-select formControlName="category" name="category">
+                            <mat-option value="">---- Select Category ----</mat-option>
+                            <mat-option *ngFor="let item of (jobConfig ||{}).categories" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">--Type--</mat-label>
+                        <mat-select formControlName="type" name="type">
+                            <mat-option value="">---- Select Type ----</mat-option>
+                            <mat-option *ngFor="let item of typeList" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="pr-1">
+                        <mat-label value="">--Location--</mat-label>
+                        <mat-select formControlName="location" name="location">
+                            <mat-option value="">---- Select Limit ----</mat-option>
+                            <mat-option *ngFor="let item of (jobConfig ||{}).locations" [value]="item">{{item}}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <button class="mb-8" mat-raised-button color="primary" [disabled]="filterForm.invalid">Filter</button>
+                </form>
+            </mat-card-content>
+        </mat-card>
+
+        <div class="shop-wrap mb-16" fxLayout="row" fxLayoutWrap="wrap">
+            <!-- Filters -->
+            <!-- Right side -->
+            <div class="full-width">
+                <!-- Search Form -->
+
+                <!-- Products container -->
+                <div class="product-container" [ngClass]="viewMode">
+                    <!-- Product Box -->
+                    <div class="product-wrap" *ngFor="let item of items.docs let i = index;" [@animate]="{value:'*',params:{delay: (i*100)+'ms', y:'50px'}}">
+                        <div class="product-inner default-bg">
+                            <h3 class="job-title">{{item.title}}</h3>
+                            <div class="job-summary">
+                                <h4 style="text-decoration: underline;">Job Description:</h4>
+                                <div fxLayout="row wrap">
+                                    {{((item ||{}).summary ||{}).length ? item.summary.substring(0,120) + '...' : ''}}
+                                </div>
+                            </div>
+
+                            <div class="info-wrap p-1">
+                                <div class="main-info-1">
+                                    <div class="row">
+                                        <span class="cal-text"> Type:  {{item.type}}</span>
+                                        <span fxFlex></span>
+                                        <span class="cal-text"> {{item.created | date}}</span>
+                                    </div>
+                                    <div class="row">
+                                        <span class="cal-text"> Category:  {{item.category}}</span>
+                                        <span fxFlex></span>
+                                        <span class="cal-text">Location: {{item.location}}</span>
+                                    </div>
+                                </div>
+                                <div class="actions" style="margin-top: 7px;">
+                                    <div class="price-rating">
+                                        <div class="item-but">
+                                            <span fxFlex></span>
+                                            <button [routerLink]="['/home/jd']" [queryParams]="{_id: item._id }" mat-flat-button color="primary">Apply Job <mat-icon>arrow_right_alt</mat-icon></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="((items ||{}).docs ||{}).length===0">
+                        Not available
+                    </div>
+                    <!-- End Product -->
+
+                </div>
+                <!-- End Products container -->
+            </div>
+
+        </div>
+    </mat-card-content>
+</mat-card>
